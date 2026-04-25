@@ -1,0 +1,10 @@
+# ---------------------------------------------------------
+# DEPENDÊNCIAS PARA AMBIENTE DE PRODUÇÃO (PRODUCTION.TXT)
+# ---------------------------------------------------------
+-r base.txt
+
+# Servidor HTTP de alta performance para produção
+gunicorn
+
+# Driver para banco de dados PostgreSQL (Padrão em servidores)
+psycopg2-binary

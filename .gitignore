@@ -1,0 +1,66 @@
+# --- 1. AMBIENTES VIRTUAIS E DEPENDÊNCIAS ---
+# Ignora as pastas de bibliotecas instaladas (elas são pesadas e recriáveis via requirements.txt)
+venv/
+.venv/
+env/
+venv-portfolio/
+# Byte-compiled / arquivos de cache do Python (melhoram performance local, mas são lixo no Git)
+__pycache__/
+*.py[cod]
+*$py.class
+.python-version
+
+# --- 2. DADOS E MÍDIA (ESTRITAMENTE LOCAL) ---
+# O banco de dados SQLite nunca deve ir para o GitHub (contém dados de teste e senhas locais)
+db.sqlite3
+db.sqlite3-journal
+# Pasta de mídia (fotos que você sobe no admin) deve ficar fora do Git
+media/*
+!media/.gitkeep
+# Pasta gerada pelo collectstatic (usada apenas no deploy)
+staticfiles/
+
+# --- 3. SEGURANÇA E PRIVACIDADE (CRÍTICO) ---
+# NUNCA remova o .env daqui. Ele contém sua SECRET_KEY e senhas de e-mail.
+.env
+.env.local
+.env.prod
+config.json
+secrets.txt
+*.log
+*.pot
+*.pyc
+
+# --- 4. JAVASCRIPT / NODE.JS (v0/Vercel/Front-end) ---
+node_modules/
+.vercel/
+.next/
+dist/
+build/
+.npm
+.eslintcache
+
+# --- 5. ARQUIVOS DE SISTEMA E IDEs ---
+# Ignora arquivos gerados pelo Windows, Mac e Editores (VSCode, PyCharm)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.bak
+
+# --- 6. COMPILADOS, BINÁRIOS E EXTRAS ---
+*.exe
+*.obj
+*.out
+*.bin
+*.iso
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/

@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {# BLOCO DE TÍTULO: Permite que páginas filhas alterem o título da aba do navegador #}
+    <title>{% block title %}{{ perfil.nome|default:"Seu Nome" }} | Desenvolvedor Full-Stack{% endblock %}</title>
+    
+    {# SEO & ACESSIBILIDADE: Metatags dinâmicas para melhor ranqueamento e leitura de redes sociais #}
+    <meta name="description" content="{{ perfil.bio_curta|default:'Portfólio de Desenvolvedor Full-Stack focado em soluções robustas.' }}">
+    <meta name="theme-color" content="#0a1628">
+
+    {# OPEN GRAPH: Define como o site aparece ao ser compartilhado no LinkedIn ou WhatsApp #}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ perfil.nome|default:'Portfólio' }} | Desenvolvedor Full-Stack">
+    <meta property="og:description" content="{{ perfil.bio_curta }}">
+    {% if perfil.foto %}
+    <meta property="og:image" content="{{ perfil.foto.url }}">
+    {% endif %}
+
+    {# ARQUIVOS ESTÁTICOS: O Django gerencia o versionamento de CSS e imagens via {% static %} #}
+    <link rel="icon" type="image/png" href="{% static 'icons/favicon.webp' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    {# PERFORMANCE: Preconnect acelera o carregamento de fontes externas #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header" id="header">
+        <nav class="nav container">
+            {# LOGO: Uso de aria-label para acessibilidade em elementos de marca #}
+            <a href="/" class="nav__logo" aria-label="Voltar ao início">
+                <span class="logo-bracket" aria-hidden="true">&lt;</span>
+                {{ perfil.nome|default:"Seu Nome" }}
+                <span class="logo-bracket" aria-hidden="true">/&gt;</span>
+            </a>
+
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    {# LINKS DE NAVEGAÇÃO: Devem coincidir com as IDs das seções no home.html #}
+                    <li class="nav__item"><a href="#home" class="nav__link active">Início</a></li>
+                    <li class="nav__item"><a href="#about" class="nav__link">Sobre</a></li>
+                    <li class="nav__item"><a href="#projects" class="nav__link">Projetos</a></li>
+                    <li class="nav__item"><a href="#skills" class="nav__link">Habilidades</a></li>
+                    <li class="nav__item"><a href="#contact" class="nav__link">Contato</a></li>
+                </ul>
+                <button class="nav__close" id="nav-close" aria-label="Fechar menu">
+                    <img src="{% static 'icons/close.svg' %}" alt="" aria-hidden="true" width="24" height="24">
+                </button>
+            </div>
+
+            <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menu">
+                <img src="{% static 'icons/menu.svg' %}" alt="" aria-hidden="true" width="24" height="24">
+            </button>
+        </nav>
+    </header>
+
+    {# BLOCO DE CONTEÚDO: É aqui que o home.html "injeta" seu código específico #}
+    {% block content %}
+    {% endblock %}
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__brand">
+                    <a href="#" class="footer__logo">
+                        <span class="logo-bracket" aria-hidden="true">&lt;</span>
+                        {{ perfil.nome|default:"Seu Nome" }}
+                        <span class="logo-bracket" aria-hidden="true">/&gt;</span>
+                    </a>
+                    <p class="footer__description">
+                        Desenvolvedor Full-Stack focado em transformar ideias em aplicações robustas, escaláveis e de alto impacto.
+                    </p>
+                </div>
+                
+                <div class="footer__links">
+                    <h4 class="footer__title">Links Rápidos</h4>
+                    <ul class="footer__list">
+                        <li><a href="#home" class="footer__link">Início</a></li>
+                        <li><a href="#about" class="footer__link">Sobre</a></li>
+                        <li><a href="#projects" class="footer__link">Projetos</a></li>
+                        <li><a href="#skills" class="footer__link">Habilidades</a></li>
+                        <li><a href="#contact" class="footer__link">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer__social">
+                    <h4 class="footer__title">Redes Sociais</h4>
+                    <div class="social__links">
+                        {# SEGURANÇA: rel="noopener" é essencial ao usar target="_blank" para evitar vulnerabilidades #}
+                        <a href="https://www.facebook.com/" class="social__link" target="_blank" rel="noopener" aria-label="Facebook">
+                            <img src="{% static 'icons/social/facebook.svg' %}" alt="" aria-hidden="true" width="24" height="24">
+                        </a>
+                        <a href="https://www.instagram.com/" class="social__link" target="_blank" rel="noopener" aria-label="Instagram">
+                            <img src="{% static 'icons/social/instagram.svg' %}" alt="" aria-hidden="true" width="24" height="24">
+                        </a>
+                        <a href="https://www.linkedin.com/in/" class="social__link" target="_blank" rel="noopener" aria-label="LinkedIn">
+                            <img src="{% static 'icons/social/linkedin.svg' %}" alt="" aria-hidden="true" width="24" height="24">
+                        </a>
+                        <a href="https://x.com/" class="social__link" target="_blank" rel="noopener" aria-label="X">
+                            <img src="{% static 'icons/social/x.svg' %}" alt="" aria-hidden="true" width="24" height="24">
+                        </a>
+                        <a href="https://www.tiktok.com/" class="social__link" target="_blank" rel="noopener" aria-label="TikTok">
+                            <img src="{% static 'icons/social/tiktok.svg' %}" alt="" aria-hidden="true" width="24" height="24">
+                        </a>
+                        <a href="https://github.com/" class="social__link" target="_blank" rel="noopener" aria-label="GitHub">
+                            <img src="{% static 'icons/social/github.svg' %}" alt="" aria-hidden="true" width="24" height="24">
+                        </a>
+                        </div>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p class="footer__copyright">
+                    {# TAG {% now "Y" %}: Função do Django para exibir sempre o ano atual automaticamente #}
+                    &copy; {% now "Y" %} {{ perfil.nome|default:"Seu Nome" }}. Todos os direitos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    {# UI/UX: Botão flutuante para melhorar a navegabilidade em páginas longas #}
+    <a href="#home" class="back-to-top" id="back-to-top" aria-label="Voltar ao topo">
+        <img src="{% static 'icons/arrow-up.svg' %}" alt="" aria-hidden="true" width="24" height="24">
+    </a>
+
+    {# DJANGO MESSAGES: Sistema de alertas (Sucesso, Erro) disparados pelo back-end #}
+    {% if messages %}
+    <div class="toast-container">
+        {% for message in messages %}
+        <div class="toast toast--{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {# SCRIPTS: Carregados no final para não bloquear a renderização inicial do HTML #}
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

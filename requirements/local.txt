@@ -1,0 +1,30 @@
+# ---------------------------------------------------------
+# FERRAMENTAS DE DESENVOLVIMENTO E QUALIDADE (LOCAL.TXT)
+# ---------------------------------------------------------
+-r base.txt
+
+# Testes Automatizados e Cobertura de Código
+pytest-django
+pytest-cov
+
+# Linters e Formatadores (Mantêm o código limpo/padronizado)
+flake8
+black
+
+# Interface de Console Interativa (IPython)
+ipython
+
+# Engine de Testes e Plugins (Versões detectadas no seu sistema)
+pytest==9.0.3
+pytest-django==4.12.0
+pytest-cov==7.1.0
+coverage==7.13.5
+
+# Auxiliares do Pytest (Essenciais para o pytest.ini funcionar)
+iniconfig==2.3.0
+pluggy==1.6.0
+packaging==26.0
+
+# Interface e Terminal
+colorama==0.4.6 # Melhora a leitura de cores no terminal Windows
+Pygments==2.20.0 # Realce de sintaxe para o IPython/Terminal
