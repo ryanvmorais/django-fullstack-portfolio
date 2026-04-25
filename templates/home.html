@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+    <!-- Seção Hero -->
     <main id="main-content">
         <section class="hero" id="home" aria-labelledby="hero-title">
             <div class="hero__container container">
@@ -65,7 +66,8 @@
                 </a>
             </div>
         </section>
-
+        
+        <!-- Seção Sobre -->
         <section class="about section" id="about">
             <div class="container">
                 <span class="section__subtitle">Conheça-me</span>
@@ -122,7 +124,8 @@
                 </div>
             </div>
         </section>
-
+        
+        <!-- Seção Projetos -->
         <section class="projects section" id="projects">
             <div class="container">
                 <span class="section__subtitle">Meu Trabalho</span>
@@ -171,6 +174,7 @@
             </div>
         </section>
 
+        <!-- Seção Habilidades -->
         <section class="skills section" id="skills">
             <div class="container">
                 <span class="section__subtitle">Minhas Competências</span>
@@ -216,6 +220,7 @@
                     {% endfor %}
                 </div>
 
+                <!-- Ícones de Tecnologias -->
                 <div class="skills__icons" aria-label="Ícones de tecnologias">
                     {% for tech in tech_icons %}
                         <div class="skills__icon" title="{{ tech.nome }}">
@@ -228,6 +233,7 @@
             </div>
         </section>
 
+        <!-- Seção de Contato -->
         <section class="contact section" id="contact">
             <div class="container">
                 <span class="section__subtitle">Vamos Conversar</span>
