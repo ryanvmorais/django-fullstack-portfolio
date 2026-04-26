@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
 # DESENVOLVIMENTO: '*' permite acessar de qualquer lugar localmente
-# PRODUÇÃO: No .env, coloque apenas o seu domínio (ex: ryanv.pythonanywhere.com)
+# PRODUÇÃO: No .env, coloque apenas o seu domínio (ex: seu-nome.pythonanywhere.com)
 ALLOWED_HOSTS = ['*'] if DEBUG else os.getenv('ALLOWED_HOSTS', '').split(',')
 
 INSTALLED_APPS = [

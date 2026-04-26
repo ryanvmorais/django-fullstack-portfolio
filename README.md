@@ -20,7 +20,7 @@ Este projeto foi estruturado para consolidar pilares fundamentais de engenharia 
 
 ---
 
-### 🧠 Guia de Implementação: A Lógica por trás do Código:
+### 🧠 Guia de Implementação (A Lógica por trás do Código):
 Para quem está começando, o maior desafio não é decorar comandos do Django, mas entender a **montagem do raciocínio** de uma aplicação profissional. Confira os pilares da construção deste projeto:
 1. **Arquitetura de Dados Relacional:** Em vez de textos soltos, utilizamos o **ORM do Django** para criar relacionamentos inteligentes. Por exemplo, um `Projeto` está ligado a uma `Categoria` e a várias `Tecnologias`. Isso permite que o banco de dados trabalhe por você, facilitando filtros e buscas.
 2. **Otimização de Consultas (Performance):** Para evitar que o site fique lento, usamos um "truque sênior": o `select_related` e o `prefetch_related`. Eles reduzem o número de idas ao banco de dados, buscando todas as informações necessárias em uma única viagem, o que é crucial para manter a **Alta Performance**.
