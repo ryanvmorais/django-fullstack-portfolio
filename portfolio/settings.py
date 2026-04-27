@@ -36,7 +36,7 @@ if not SECRET_KEY:
 
 # DESENVOLVIMENTO: DEBUG = True (Erros detalhados) | PRODUÇÃO: DEBUG = False (Segurança total)
 # O padrão 'False' é uma medida de "segurança por padrão" (secure by default)
-DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 # Em produção, o link do admin deve ser alterado no .env para dificultar ataques
 # Isso evita o brute-force em /admin/ que é o alvo padrão de bots
