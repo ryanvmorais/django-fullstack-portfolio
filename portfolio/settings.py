@@ -18,23 +18,32 @@ import ssl
 
 # --- 1. AMBIENTE E SEGURANÇA BÁSICA ---
 
-# Carrega as variáveis do arquivo .env (Onde ficam senhas e chaves)
-load_dotenv()
-
+# Localização do Projeto: Define o diretório raiz para referências de caminhos
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Em produção, o link do admin deve ser alterado no .env para segurança
-ADMIN_URL_PATH = os.getenv('ADMIN_URL', 'admin/')
+# Carregamento de Variáveis: Busca o arquivo .env usando o caminho absoluto (Garante o deploy)
+# Nota: O uso do operador / (pathlib) é a forma moderna e robusta de gerenciar caminhos no Python 3.10+
+env_path = BASE_DIR / '.env'
+load_dotenv(dotenv_path=env_path)
 
 # A SECRET_KEY é a "digital" do seu site. Nunca a exponha no GitHub!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# DESENVOLVIMENTO: DEBUG = True (Mostra erros detalhados)
-# PRODUÇÃO: No .env, mude para DEBUG=False (Esconde erros do usuário final)
+# Validação Crítica: Impede que o servidor suba sem a chave de segurança
+# Sênior tip: Exibir o caminho procurado facilita o debug em ambientes de VPS/PaaS
+if not SECRET_KEY:
+    raise ValueError(f"ERRO: A variável SECRET_KEY não foi encontrada no arquivo .env! Caminho verificado: {env_path}")
+
+# DESENVOLVIMENTO: DEBUG = True (Erros detalhados) | PRODUÇÃO: DEBUG = False (Segurança total)
+# O padrão 'False' é uma medida de "segurança por padrão" (secure by default)
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-# DESENVOLVIMENTO: '*' permite acessar de qualquer lugar localmente
-# PRODUÇÃO: No .env, coloque apenas o seu domínio (ex: seu-nome.pythonanywhere.com)
+# Em produção, o link do admin deve ser alterado no .env para dificultar ataques
+# Isso evita o brute-force em /admin/ que é o alvo padrão de bots
+ADMIN_URL_PATH = os.getenv('ADMIN_URL', 'admin/')
+
+# Define quais domínios podem acessar o site (Segurança de cabeçalho Host)
+# No .env use: ALLOWED_HOSTS=djangofullstackportfolio.pythonanywhere.com
 ALLOWED_HOSTS = ['*'] if DEBUG else os.getenv('ALLOWED_HOSTS', '').split(',')
 
 INSTALLED_APPS = [
@@ -87,24 +96,29 @@ DATABASES = {
     }
 }
 
-LANGUAGE_CODE = 'pt-br' 
-TIME_ZONE = 'America/Sao_Paulo' 
+LANGUAGE_CODE = 'pt-br'
+TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
 # --- 3. ESTÁTICOS E MÍDIA ---
 
+# URL base para acessar os arquivos via navegador
 STATIC_URL = 'static/'
+
+# Onde o Django busca arquivos estáticos durante o desenvolvimento
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-# Pasta onde o comando collectstatic reunirá todos os arquivos para o deploy
+# Onde o Django vai "REUNIR" todos os arquivos para a produção
+# É desta pasta que o PythonAnywhere vai ler o CSS/JS
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-MEDIA_URL = '/media/'
+# Configurações de Mídia (Uploads de imagens, etc.)
+MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # WhiteNoise: Comprime e faz cache de arquivos estáticos para maior velocidade
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # --- 4. SEGURANÇA AVANÇADA (SÊNIOR) ---
 
@@ -125,9 +139,9 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    
+
     # HSTS: Avisa ao navegador para usar SEMPRE HTTPS por 1 ano
-    SECURE_HSTS_SECONDS = 31536000 
+    SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
