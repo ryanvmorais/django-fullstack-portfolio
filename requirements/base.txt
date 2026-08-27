@@ -9,7 +9,7 @@ sqlparse==0.6.0
 tzdata==2026.1
 
 # Gerenciamento de Imagens e Arquivos Estáticos
-Pillow==12.2.0
+Pillow==12.3.0
 whitenoise==6.12.0
 
 # Camada de Segurança e Sanitização de Dados
