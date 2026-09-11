@@ -8,11 +8,12 @@ ESTRUTURA DO CÓDIGO:
 """
 
 import os
+
 from django.core.asgi import get_asgi_application
 
 # O comando setdefault garante que o servidor saiba exatamente onde
 # encontrar o seu arquivo 'settings.py' ao iniciar o processo.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'portfolio.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "portfolio.settings")
 
 # 'application' é a variável que o seu servidor de produção (como o Daphne ou Uvicorn)
 # procurará para colocar o site no ar.
