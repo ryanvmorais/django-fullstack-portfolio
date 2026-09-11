@@ -2,6 +2,15 @@
 
 # 🌊 Portfólio Dinâmico com Django | Template Educativo para Portfólios
 
+![Python](https://img.shields.io/badge/Python-3.14+-3776AB?logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-6.1-092E20?logo=django&logoColor=white)
+![deps](https://img.shields.io/badge/deps-uv-DE5FE9)
+[![CI](https://github.com/ryanvmorais/django-fullstack-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/ryanvmorais/django-fullstack-portfolio/actions/workflows/ci.yml)
+![Lint](https://img.shields.io/badge/lint-ruff-261230)
+![Format](https://img.shields.io/badge/style-black-000000)
+![Types](https://img.shields.io/badge/types-mypy%20strict-2A6DB2)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 🔗 **[Ver demo ao vivo](https://djangofullstackportfolio.pythonanywhere.com/)**
 
 Este repositório contém um **Portfólio Profissional** desenvolvido com o framework Django. Embora se apresente visualmente como uma *SPA* (Single Page Application), o projeto foi construído como um sistema robusto, focando em **segurança avançada**, **otimização de banco de dados** e **arquitetura limpa**.
