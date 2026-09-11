@@ -9,13 +9,16 @@ ESTRUTURA DO CÓDIGO:
 4. TESTES DE UTILITÁRIOS: Conversão de imagem para WebP no save() dos models.
 
 Estratégia de isolamento: nenhuma chamada de rede real é feita durante a
-suíte. `settings.EMAIL_BACKEND` é trocado para o backend em memória do Django
-(`disable_real_email`, abaixo) — sem isso, os testes que passam pelo fluxo de
-POST do formulário de contato disparariam `send_mail()` contra o SMTP real do
-Gmail configurado em `settings.py`, tornando a suíte lenta, dependente de rede
-e capaz de enviar e-mails de verdade se um `.env` de produção estiver ativo.
-A falha de envio (`test_contato_erro_envio_email`) mocka `views.send_mail`
-diretamente, no ponto de uso.
+suíte, e nenhum teste depende do conteúdo do `.env` local. `settings.EMAIL_BACKEND`
+é trocado para o backend em memória do Django e `settings.EMAIL_HOST_USER` é
+fixado num valor de teste (`disable_real_email`, abaixo) — sem isso, os testes
+que passam pelo fluxo de POST do formulário de contato disparariam
+`send_mail()` contra o SMTP real do Gmail configurado em `settings.py` usando
+a credencial real do `.env` de quem estiver rodando a suíte, tornando os
+testes lentos, dependentes de rede, capazes de enviar e-mails de verdade, e
+dependentes de uma variável de ambiente que não existe em CI. A falha de
+envio (`test_contato_erro_envio_email`) mocka `views.send_mail` diretamente,
+no ponto de uso.
 """
 
 import io
@@ -51,12 +54,21 @@ def disable_ssl_redirect(settings):
 @pytest.fixture(autouse=True)
 def disable_real_email(settings):
     """
-    Troca o backend de e-mail para o backend em memória do Django.
+    Isola a suíte de qualquer credencial/estado de e-mail real.
 
-    Sem isso, `views.home()` chamaria `send_mail()` contra o SMTP real do
-    Gmail (host/porta fixos em `settings.py`) a cada POST de contato bem-sucedido.
+    Troca `EMAIL_BACKEND` para o backend em memória do Django — sem isso,
+    `views.home()` chamaria `send_mail()` contra o SMTP real do Gmail
+    (host/porta fixos em `settings.py`) a cada POST de contato bem-sucedido.
+
+    Também fixa `EMAIL_HOST_USER` num valor de teste: sem isso, a suíte
+    herdaria o valor de `EMAIL_USER` do `.env` local (via `load_dotenv` em
+    `settings.py`). Isso mascarava um bug — a suíte só passava na máquina de
+    quem tinha um `.env` com credencial real preenchida, e falhava em CI (sem
+    `.env`, `EMAIL_HOST_USER=None`), onde `send_mail()` com remetente/
+    destinatário `None` não gera entrada em `mail.outbox`.
     """
     settings.EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+    settings.EMAIL_HOST_USER = "contato-teste@example.com"
 
 
 @pytest.fixture(autouse=True)
