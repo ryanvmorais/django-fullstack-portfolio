@@ -2,6 +2,8 @@
 
 # 🌊 Portfólio Dinâmico com Django | Template Educativo para Portfólios
 
+🔗 **[Ver demo ao vivo](https://djangofullstackportfolio.pythonanywhere.com/)**
+
 Este repositório contém um **Portfólio Profissional** desenvolvido com o framework Django. Embora se apresente visualmente como uma *SPA* (Single Page Application), o projeto foi construído como um sistema robusto, focando em **segurança avançada**, **otimização de banco de dados** e **arquitetura limpa**.
 
 ### 🎯 Objetivo do Projeto:
