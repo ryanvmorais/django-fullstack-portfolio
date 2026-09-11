@@ -7,6 +7,7 @@ ESTRUTURA DO CÓDIGO:
 """
 
 from django.urls import path
+
 from . import views
 
 # O urlpatterns é uma lista que o Django percorre do topo para baixo
@@ -17,5 +18,5 @@ urlpatterns = [
     # '' significa que este é o endereço principal (ex: www.seusite.com.br/)
     # views.home chama a função que processa os dados no banco
     # name='home' permite que você use o nome 'home' em vez do link fixo nos templates
-    path('', views.home, name='home'),
+    path("", views.home, name="home"),
 ]

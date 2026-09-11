@@ -1,9 +1,8 @@
 # --- 1. AMBIENTES VIRTUAIS E DEPENDÊNCIAS ---
-# Ignora as pastas de bibliotecas instaladas (elas são pesadas e recriáveis via requirements.txt)
+# Ignora as pastas de bibliotecas instaladas (recriáveis via "uv sync", que lê o uv.lock commitado)
 venv/
 .venv/
 env/
-venv-portfolio/
 # Byte-compiled / arquivos de cache do Python (melhoram performance local, mas são lixo no Git)
 __pycache__/
 *.py[cod]
@@ -64,3 +63,4 @@ Thumbs.db
 .coverage
 htmlcov/
 .mypy_cache/
+.ruff_cache/

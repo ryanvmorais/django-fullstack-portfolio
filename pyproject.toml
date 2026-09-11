@@ -1,0 +1,116 @@
+# =============================================================================
+# Configuração do projeto (PEP 518/621) — gerenciado com uv.
+#
+# [project]                      metadados + dependências de runtime
+# [dependency-groups] dev        ferramentas de desenvolvimento (uv instala por padrão)
+# [project.optional-dependencies] prod   extras de produção (uv sync --extra prod)
+#
+# As versões exatas de TODO o grafo (diretas + transitivas) ficam travadas no
+# uv.lock, gerado por `uv lock`. As tabelas [tool.*] concentram a config das
+# ferramentas de qualidade.
+# =============================================================================
+
+[project]
+name = "django-fullstack-portfolio"
+version = "1.0.0"
+requires-python = ">=3.14"
+dependencies = [
+    "Django>=6.0.8",
+    "Pillow>=12.3.0",
+    "whitenoise>=6.12.0",
+    "bleach>=6.4.0",
+    "django-csp>=4.0",
+    "python-dotenv>=1.2.2",
+    "certifi>=2026.2.25",
+]
+
+[project.optional-dependencies]
+prod = [
+    "gunicorn",
+    "psycopg2-binary",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.6",
+    "black>=26.5.1",
+    "mypy>=2.3.1",
+    "django-stubs[compatible-mypy]>=6.1.0",
+    "ipython>=9.17.1",
+    "pytest>=9.1.1",
+    "pytest-django>=4.14.0",
+    "pytest-cov>=7.1.0",
+    "pip-audit>=2.10.1",
+]
+
+[tool.uv]
+# Aplicação Django (não é uma lib a ser empacotada/instalada como pacote).
+package = false
+
+# --- Formatador ---
+[tool.black]
+line-length = 88
+target-version = ["py314"]
+extend-exclude = "migrations|\\.venv"
+
+# --- Linter (substitui o flake8 + isort, lê o pyproject nativamente) ---
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+extend-exclude = ["migrations", ".venv"]
+
+[tool.ruff.lint]
+# E/W = pycodestyle, F = pyflakes (≈ flake8), I = isort, UP = pyupgrade
+select = ["E", "W", "F", "I", "UP"]
+# E501 (comprimento de linha) fica a cargo do black; docstrings/help_text e URLs
+# longas não são quebradas pelo formatador e não devem falhar o lint.
+ignore = ["E501"]
+
+# --- Testes ---
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "portfolio.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+pythonpath = ["."]
+
+# --- Cobertura ---
+[tool.coverage.run]
+source = ["app_portfolio"]
+omit = ["*/migrations/*", "*/tests/*"]
+
+# --- Type checker ---
+[tool.mypy]
+python_version = "3.14"
+strict = true
+# Os genéricos do Django (ModelAdmin[...], ListView[...]) são incômodos e de
+# baixo valor em código de aplicação; desligar este check do strict é prática
+# comum em projetos Django + django-stubs.
+disallow_any_generics = false
+show_error_codes = true
+pretty = true
+plugins = ["mypy_django_plugin.main"]
+exclude = ['migrations/', '\.venv/', 'venv-portfolio/']
+
+# Migrations são auto-geradas: não exigir tipagem
+[[tool.mypy.overrides]]
+module = "*.migrations.*"
+ignore_errors = true
+
+# Suíte de testes: relaxa checagens que conflitam com padrões idiomáticos de
+# teste (response.json() do test client, .first() opcional, None proposital).
+# disallow_untyped_defs desligado porque os testes usam fixtures do
+# pytest-django (client, settings) via injeção de parâmetro — tipá-las exigiria
+# importar tipos internos do pytest só para satisfazer o mypy. Os testes são
+# validados pela execução (pytest), não pelo type checker.
+[[tool.mypy.overrides]]
+module = "app_portfolio.tests"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disable_error_code = ["attr-defined", "union-attr", "arg-type", "return-value"]
+
+# Bibliotecas de terceiros sem stubs de tipagem
+[[tool.mypy.overrides]]
+module = ["bleach.*", "csp.*"]
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "portfolio.settings"

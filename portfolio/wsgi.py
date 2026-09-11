@@ -8,11 +8,12 @@ ESTRUTURA DO CÓDIGO:
 """
 
 import os
+
 from django.core.wsgi import get_wsgi_application
 
 # O Django precisa saber onde as configurações (settings.py) estão localizadas.
 # Este comando define o caminho padrão para o módulo de configurações do projeto.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'portfolio.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "portfolio.settings")
 
 # Esta variável 'application' é o ponto de entrada que o servidor (ex: Gunicorn)
 # usará para "chamar" o Django e processar as requisições dos visitantes.

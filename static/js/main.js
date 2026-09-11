@@ -304,9 +304,10 @@
         const notification = document.createElement('div');
         notification.className = `notification notification--${type}`;
         notification.innerHTML = `
-            <span class="notification__message">${message}</span>
+            <span class="notification__message"></span>
             <button class="notification__close" aria-label="Fechar">&times;</button>
         `;
+        notification.querySelector('.notification__message').textContent = message;
 
         // Add styles
         notification.style.cssText = `

@@ -1,0 +1,81 @@
+# Pipeline de CI (GitHub Actions). Espelha o portao de qualidade local
+# (ruff -> black -> mypy -> pytest) para que um check verde no PR signifique o
+# mesmo que um clone limpo passando. Dois jobs independentes:
+#   qualidade  ruff -> black --check -> mypy -> pytest  (Python 3.14)
+#   seguranca  pip-audit (CVEs) + manage.py check --deploy (postura de producao)
+#
+# CodeQL/code scanning fica de fora: exige GitHub Advanced Security em repo
+# privado. Dependabot (alerts + version updates) cobre a varredura continua.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancela runs obsoletos do mesmo ref: um push novo no PR mata o run anterior.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # --- Portao de qualidade: a sequencia canonica do CLAUDE.md ---
+  qualidade:
+    runs-on: ubuntu-latest
+    env:
+      # portfolio.settings faz os.getenv("SECRET_KEY") + ValueError se ausente;
+      # valor descartavel, so para o settings importar em CI (nao e producao).
+      SECRET_KEY: ci-placeholder-nao-usar-em-producao-3MVL5eNw-XBWZDpk
+      DEBUG: "True"
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Instala o uv
+        uses: astral-sh/setup-uv@v10.1.0
+        with:
+          python-version: "3.14"
+          enable-cache: true
+
+      - name: Sincroniza o ambiente (runtime + grupo dev)
+        run: uv sync --frozen
+
+      - name: Ruff (lint + ordem de imports)
+        run: uv run ruff check .
+
+      - name: Black (formatacao)
+        run: uv run black --check .
+
+      - name: Mypy (tipos)
+        run: uv run mypy app_portfolio portfolio
+
+      - name: Pytest (suite completa)
+        run: uv run pytest
+
+  # --- Seguranca: nao bloqueia o merge por si so; e um sinal visivel no PR ---
+  seguranca:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ci-placeholder-nao-usar-em-producao-3MVL5eNw-XBWZDpk
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Instala o uv
+        uses: astral-sh/setup-uv@v10.1.0
+        with:
+          python-version: "3.14"
+          enable-cache: true
+
+      - name: Sincroniza o ambiente
+        run: uv sync --frozen
+
+      - name: pip-audit (CVEs conhecidas nas dependencias)
+        run: uv run pip-audit
+
+      - name: check --deploy (SSL, HSTS, cookies, headers)
+        run: uv run python manage.py check --deploy
+        env:
+          DEBUG: "False"
+          ALLOWED_HOSTS: "ci-placeholder.invalid"
