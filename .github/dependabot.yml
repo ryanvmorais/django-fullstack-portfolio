@@ -1,0 +1,29 @@
+# Dependabot — varredura automática de dependências, consumida pelo GitHub
+# (sem CI próprio). Abre PRs de atualização de rotina; separado das security
+# updates (Dependabot alerts, ligadas em Settings > Security do repositório).
+version: 2
+updates:
+  # Dependências Python — diretas do pyproject.toml, grafo travado no uv.lock.
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build(deps)"
+      prefix-development: "build(deps-dev)"
+    labels:
+      - "dependencies"
+
+  # Actions pinadas nos workflows em .github/workflows/.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build(ci)"
+    labels:
+      - "dependencies"
