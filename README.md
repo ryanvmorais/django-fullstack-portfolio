@@ -40,8 +40,10 @@ Para garantir a melhor experiência de aprendizado e a execução correta de tod
 
 | Ferramenta | Descrição | Badge |
 | :--- | :--- | :--- |
-| **Python 3.10+** | Linguagem base focada em legibilidade e eficiência no back-end. | ![Python - Linguagem de Programação](https://img.shields.io/badge/-Python-3776AB%3Fstyle%3Dflat%26logo%3Dpython?logo=python&logoColor=3776AB&logoSize=flat&color=F0F0F0) |
-| **Django 4.2+** | Framework web "com baterias incluídas" utilizado para toda a lógica e ORM. | ![Django](https://img.shields.io/badge/Django-django?style=flat&logo=django&logoColor=%23092E20&color=F0F0F0) |
+| **Python 3.14+** | Linguagem base focada em legibilidade e eficiência no back-end. | ![Python - Linguagem de Programação](https://img.shields.io/badge/-Python-3776AB%3Fstyle%3Dflat%26logo%3Dpython?logo=python&logoColor=3776AB&logoSize=flat&color=F0F0F0) |
+| **Django 6.0+** | Framework web "com baterias incluídas" utilizado para toda a lógica e ORM. | ![Django](https://img.shields.io/badge/Django-django?style=flat&logo=django&logoColor=%23092E20&color=F0F0F0) |
+| **uv** | Gerenciador de dependências e ambientes virtuais (substitui `pip`), com lockfile reprodutível. | ![uv](https://img.shields.io/badge/uv-uv?style=flat&logo=uv&logoColor=DE5FE9&color=F0F0F0) |
+| **Ruff / Black / Mypy** | Lint, formatação e checagem de tipos estática — o portão de qualidade antes de cada commit. | ![Ruff](https://img.shields.io/badge/Ruff-ruff?style=flat&logo=ruff&logoColor=D7FF64&color=F0F0F0) |
 | **Pytest** | Framework de testes avançado para garantir a integridade de cada função. | ![Pytest](https://img.shields.io/badge/Pytest-pytest?style=flat&logo=pytest&logoColor=%230A9EDC&color=F0F0F0) |
 | **Vanilla JS** | JavaScript puro (ES6+) para interações leves sem a carga de frameworks pesados. | ![JavaScript - Linguagem de Programação](https://img.shields.io/badge/-JavaScript-F7DF1E%3Fstyle%3Dflat%26logo%3Djavascript?style=flat&logo=javascript&logoColor=F7DF1E&logoSize=flat&color=F0F0F0) |
 | **HTML5/CSS3** | Estrutura semântica e estilização moderna baseada em Flexbox e Grid. | ![HTML5/CSS3](https://img.shields.io/badge/HTML-html5?style=flat&logo=html5&logoColor=%23E34F26&color=F0F0F0) |
@@ -57,16 +59,39 @@ Para garantir a melhor experiência de aprendizado e a execução correta de tod
     ```
 2.  **Configure as variáveis de ambiente:**
     - Copie o arquivo `.env.example` para `.env` e insira suas chaves (SECRET_KEY, EMAIL_USER, etc).
-3.  **Instale as dependências:**
+3.  **Instale as dependências** (o projeto usa [uv](https://docs.astral.sh/uv/), que cria e gerencia o ambiente virtual automaticamente):
     ```bash
-    pip install -r requirements.txt
+    uv sync
     ```
 4.  **Execute as migrações e o servidor:**
     ```bash
-    python manage.py migrate
-    python manage.py runserver
+    uv run python manage.py migrate
+    uv run python manage.py runserver
     ```
 > ⚠️ **Nota sobre o Formulário de Contato:** Para que o envio de e-mails funcione, você precisará de uma **"Senha de App"** do Google (caso use Gmail). Não utilize sua senha comum de login; o Google bloqueia essa conexão por segurança. Configure isso em *Segurança > Verificação em duas etapas > Senhas de App*.
+
+---
+
+### Qualidade e testes
+
+O projeto roda uma suíte de testes automatizados (`pytest`) e um portão de
+qualidade antes de qualquer commit:
+
+```bash
+uv run ruff check .          # lint + ordem de imports
+uv run black --check .       # formatação
+uv run mypy app_portfolio portfolio   # checagem de tipos
+uv run pytest --cov=app_portfolio     # testes + cobertura
+```
+
+O mesmo portão roda automaticamente em CI (`.github/workflows/ci.yml`) a cada
+push/PR, junto com uma checagem de segurança (`pip-audit` + `manage.py check
+--deploy`). Para o mapa de cada tecnologia da stack (o que é, por que foi
+escolhida, o que estudar), veja [`docs/stack.md`](docs/stack.md); para as
+especificações de cada funcionalidade, veja [`specs/`](specs/); para o
+detalhamento exaustivo de arquitetura e convenções, veja
+[`CLAUDE.md`](CLAUDE.md).
+
 ---
 ### 📋 Atividades para praticar (Desafios de Evolução):
 
