@@ -18,6 +18,8 @@ media/*
 !media/.gitkeep
 # Pasta gerada pelo collectstatic (usada apenas no deploy)
 staticfiles/
+# Cache em arquivo do rate limit (FileBasedCache) -- puramente local/runtime
+django_cache/
 
 # --- 3. SEGURANÇA E PRIVACIDADE (CRÍTICO) ---
 # NUNCA remova o .env daqui. Ele contém sua SECRET_KEY e senhas de e-mail.

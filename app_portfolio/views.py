@@ -36,10 +36,11 @@ def home(request: HttpRequest) -> HttpResponse:
     """
     Renderiza a Home e processa o formulário de contato (GET + POST).
 
-    No POST, aplica em sequência honeypot, rate limit por IP e sanitização
-    (Bleach) antes de salvar a mensagem e disparar o e-mail de notificação.
-    Responde em HTML (navegação comum) ou JSON (requisição AJAX, identificada
-    pelo header ``X-Requested-With``).
+    No POST, aplica em sequência honeypot, validação do formulário, rate
+    limit por IP (reserva atômica via ``cache.add()``) e sanitização (Bleach)
+    antes de salvar a mensagem e disparar o e-mail de notificação. Responde em
+    HTML (navegação comum) ou JSON (requisição AJAX, identificada pelo header
+    ``X-Requested-With``).
 
     Args:
         request (HttpRequest): Requisição GET (exibição) ou POST (envio do
@@ -80,24 +81,30 @@ def home(request: HttpRequest) -> HttpResponse:
         if honeypot:
             return redirect("home")
 
-        # B. SEGURANÇA: RATE LIMIT (Controle de Fluxo)
-        # Identifica o IP e bloqueia envios repetitivos para evitar ataques ou custos de SMTP.
-        user_ip = request.META.get("REMOTE_ADDR")
-        cache_key = f"contact_limit_{user_ip}"
-        if cache.get(cache_key):
-            if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse(
-                    {"status": "error", "message": "Muitas tentativas..."}, status=429
-                )
-            messages.error(
-                request,
-                "Você já enviou uma mensagem recentemente. Por favor, aguarde 10 minutos.",
-            )
-            return redirect("home")
-
         form = MensagemContatoForm(request.POST)
 
         if form.is_valid():
+            # B. SEGURANÇA: RATE LIMIT (Controle de Fluxo)
+            # cache.add() só grava se a chave ainda não existir -- operação
+            # atômica que reserva o slot antes de processar o envio. Um
+            # cache.get() + cache.set() posterior (versão anterior) permite
+            # que requisições concorrentes passem pela checagem antes que a
+            # primeira grave o bloqueio, e todas completem o envio de e-mail
+            # (achado da auditoria de segurança: race condition CWE-362).
+            user_ip = request.META.get("REMOTE_ADDR")
+            cache_key = f"contact_limit_{user_ip}"
+            if not cache.add(cache_key, True, 600):
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse(
+                        {"status": "error", "message": "Muitas tentativas..."},
+                        status=429,
+                    )
+                messages.error(
+                    request,
+                    "Você já enviou uma mensagem recentemente. Por favor, aguarde 10 minutos.",
+                )
+                return redirect("home")
+
             # C. SEGURANÇA: SANITIZAÇÃO (Bleach)
             # Remove qualquer tag HTML maliciosa enviada no campo de mensagem (Proteção XSS).
             mensagem_limpa = bleach.clean(
@@ -127,9 +134,6 @@ def home(request: HttpRequest) -> HttpResponse:
                     # já esperado, não um caso a modelar no tipo).
                     fail_silently=False,
                 )
-
-                # Ativa o bloqueio de 10 min (600s) no cache após o envio com sucesso
-                cache.set(cache_key, True, 600)
 
                 # Suporte para respostas assíncronas (AJAX)
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
