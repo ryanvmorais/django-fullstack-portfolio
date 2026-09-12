@@ -161,9 +161,15 @@ DEFAULT_FROM_EMAIL = f"Projeto Portfólio <{EMAIL_HOST_USER}>"
 # Certificado SSL necessário para que o Python 3.10+ consiga falar com o Gmail
 EMAIL_SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
-# Cache em memória: Utilizado pelo nosso sistema de Rate Limit (Proteção contra spam)
+# Cache em arquivo: usado pelo rate limit do formulário de contato.
+# LocMemCache é por processo -- com gunicorn rodando mais de 1 worker (ver
+# extra "prod"), cada worker teria seu próprio contador e o limite por IP
+# seria multiplicado pelo número de workers (achado da auditoria de
+# segurança). FileBasedCache é compartilhado entre processos sem exigir
+# infra extra (Redis/Memcached) no plano gratuito do PythonAnywhere.
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR / "django_cache",
     }
 }

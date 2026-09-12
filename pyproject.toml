@@ -46,6 +46,9 @@ dev = [
 [tool.uv]
 # Aplicação Django (não é uma lib a ser empacotada/instalada como pacote).
 package = false
+# Resolve só pacotes publicados há 7+ dias — janela de quarentena contra
+# versões maliciosas/instáveis recém-publicadas (supply chain).
+exclude-newer = "7 days"
 
 # --- Formatador ---
 [tool.black]
