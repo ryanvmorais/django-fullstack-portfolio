@@ -52,7 +52,7 @@ Para garantir a melhor experiência de aprendizado e a execução correta de tod
 | Ferramenta | Descrição | Badge |
 | :--- | :--- | :--- |
 | **Python 3.14+** | Linguagem base focada em legibilidade e eficiência no back-end. | ![Python - Linguagem de Programação](https://img.shields.io/badge/-Python-3776AB%3Fstyle%3Dflat%26logo%3Dpython?logo=python&logoColor=3776AB&logoSize=flat&color=F0F0F0) |
-| **Django 6.0+** | Framework web "com baterias incluídas" utilizado para toda a lógica e ORM. | ![Django](https://img.shields.io/badge/Django-django?style=flat&logo=django&logoColor=%23092E20&color=F0F0F0) |
+| **Django 6.1** | Framework web "com baterias incluídas" utilizado para toda a lógica e ORM. | ![Django](https://img.shields.io/badge/Django-django?style=flat&logo=django&logoColor=%23092E20&color=F0F0F0) |
 | **uv** | Gerenciador de dependências e ambientes virtuais (substitui `pip`), com lockfile reprodutível. | ![uv](https://img.shields.io/badge/uv-uv?style=flat&logo=uv&logoColor=DE5FE9&color=F0F0F0) |
 | **Ruff / Black / Mypy** | Lint, formatação e checagem de tipos estática — o portão de qualidade antes de cada commit. | ![Ruff](https://img.shields.io/badge/Ruff-ruff?style=flat&logo=ruff&logoColor=D7FF64&color=F0F0F0) |
 | **Pytest** | Framework de testes avançado para garantir a integridade de cada função. | ![Pytest](https://img.shields.io/badge/Pytest-pytest?style=flat&logo=pytest&logoColor=%230A9EDC&color=F0F0F0) |
