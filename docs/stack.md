@@ -59,7 +59,7 @@ magnitude mais rápido para instalar.
 
 ## Framework e núcleo da aplicação
 
-### Django 6.0
+### Django 6.1
 
 O framework web: ORM, sistema de templates, Admin automático, roteamento,
 middlewares de segurança (CSRF, clickjacking, HSTS). É o núcleo em torno do

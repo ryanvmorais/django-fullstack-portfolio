@@ -4,7 +4,7 @@ Este arquivo fornece orientações ao Claude Code (claude.ai/code) ao trabalhar 
 
 ## Visão Geral do Projeto
 
-Portfólio profissional pessoal de Ryan Morais, construído com Django 6.0.
+Portfólio profissional pessoal de Ryan Morais, construído com Django 6.1.
 Projeto educacional de app único (`app_portfolio`) que serve uma página única
 (a home): perfil do desenvolvedor, projetos, habilidades técnicas,
 estatísticas de destaque e um formulário de contato com camadas anti-spam.
