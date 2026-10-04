@@ -123,7 +123,7 @@ Para exercitar o que você aprendeu e dominar o Django, tente implementar estas 
 
 Desenvolver sistemas robustos e seguros com Django envolve muitos detalhes técnicos, mas estou aqui para ajudar! Se você encontrou algum comportamento inesperado no código, teve dificuldades com as configurações de ambiente ou pensou em uma melhoria arquitetural que tornaria este projeto ainda mais didático:
 
-*   **Abra uma [Issue](https://github.com/ryanvmorais/django-fullstack-portfolio.git):** Clique no link e descreva sua dúvida ou sugestão. Esta é a melhor forma de construirmos um material de referência sólido para a comunidade e ajudarmos outros desenvolvedores que possam ter o mesmo questionamento!
+*   **Abra uma [Issue](https://github.com/ryanvmorais/django-fullstack-portfolio/issues):** Clique no link e descreva sua dúvida ou sugestão. Esta é a melhor forma de construirmos um material de referência sólido para a comunidade e ajudarmos outros desenvolvedores que possam ter o mesmo questionamento!
 *   **Me mande um E-mail:** Se preferir algo mais privado, pode me escrever em [**contato@ryanmorais.com.br**](mailto:contato@ryanmorais.com.br).
 
 Ficarei muito feliz em acompanhar sua evolução com o framework Django e receber seu feedback para melhorar cada vez mais a qualidade deste material de estudo! 🤝
