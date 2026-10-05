@@ -29,7 +29,7 @@ jobs:
   # --- Portao de qualidade: a sequencia canonica do CLAUDE.md ---
   qualidade:
     name: Qualidade (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
@@ -65,7 +65,7 @@ jobs:
 
   # --- Seguranca: nao bloqueia o merge por si so; e um sinal visivel no PR ---
   seguranca:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     env:
       SECRET_KEY: ci-placeholder-nao-usar-em-producao-3MVL5eNw-XBWZDpk
     steps:
