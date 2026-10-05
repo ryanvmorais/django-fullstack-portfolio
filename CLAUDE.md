@@ -11,6 +11,8 @@ estatísticas de destaque e um formulário de contato com camadas anti-spam.
 Deploy alvo: PythonAnywhere (processo único, SQLite em dev, PostgreSQL
 opcional em produção via `psycopg2-binary`).
 
+> **Python 3.12 é o piso (`requires-python = ">=3.12"`):** o PythonAnywhere lista Python só até o 3.13 e o servidor roda o 3.12, que também é o mínimo do Django 6.1. O `.python-version` fixa o 3.12 no desenvolvimento, o CI testa o 3.12 e o 3.14 (matriz) e `ruff`, `black` e `mypy` apontam para o 3.12: não use sintaxe exclusiva de versão mais nova (ex.: `except A, B:` sem parênteses, do 3.14). No servidor, as dependências entram pelo nome, com os pisos do `pyproject.toml` (`pip install --upgrade ...`, sem `gunicorn`/`psycopg2`).
+
 ## Comandos Comuns
 
 ```bash
