@@ -7,7 +7,6 @@ env/
 __pycache__/
 *.py[cod]
 *$py.class
-.python-version
 
 # --- 2. DADOS E MÍDIA (ESTRITAMENTE LOCAL) ---
 # O banco de dados SQLite nunca deve ir para o GitHub (contém dados de teste e senhas locais)

@@ -13,7 +13,7 @@
 [project]
 name = "django-fullstack-portfolio"
 version = "1.0.0"
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 dependencies = [
     "Django>=6.0.8",
     "Pillow>=12.3.0",
@@ -53,13 +53,13 @@ exclude-newer = "7 days"
 # --- Formatador ---
 [tool.black]
 line-length = 88
-target-version = ["py314"]
+target-version = ["py312"]
 extend-exclude = "migrations|\\.venv"
 
 # --- Linter (substitui o flake8 + isort, lê o pyproject nativamente) ---
 [tool.ruff]
 line-length = 88
-target-version = "py314"
+target-version = "py312"
 extend-exclude = ["migrations", ".venv"]
 
 [tool.ruff.lint]
@@ -82,7 +82,7 @@ omit = ["*/migrations/*", "*/tests/*"]
 
 # --- Type checker ---
 [tool.mypy]
-python_version = "3.14"
+python_version = "3.12"
 strict = true
 # Os genéricos do Django (ModelAdmin[...], ListView[...]) são incômodos e de
 # baixo valor em código de aplicação; desligar este check do strict é prática
