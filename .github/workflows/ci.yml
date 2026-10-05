@@ -1,8 +1,12 @@
 # Pipeline de CI (GitHub Actions). Espelha o portao de qualidade local
 # (ruff -> black -> mypy -> pytest) para que um check verde no PR signifique o
 # mesmo que um clone limpo passando. Dois jobs independentes:
-#   qualidade  ruff -> black --check -> mypy -> pytest  (Python 3.14)
+#   qualidade  ruff -> black --check -> mypy -> pytest  (matriz: Python 3.12 e 3.14)
 #   seguranca  pip-audit (CVEs) + manage.py check --deploy (postura de producao)
+#
+# O piso do projeto e o 3.12 (a versao do servidor no PythonAnywhere, que lista
+# Python so ate o 3.13); o 3.14 e a versao estavel mais nova. A matriz testa as
+# duas pontas, para o piso declarado no pyproject.toml nao ser so uma promessa.
 #
 # CodeQL/code scanning fica de fora: exige GitHub Advanced Security em repo
 # privado. Dependabot (alerts + version updates) cobre a varredura continua.
@@ -24,7 +28,12 @@ permissions:
 jobs:
   # --- Portao de qualidade: a sequencia canonica do CLAUDE.md ---
   qualidade:
+    name: Qualidade (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.14"]
     env:
       # portfolio.settings faz os.getenv("SECRET_KEY") + ValueError se ausente;
       # valor descartavel, so para o settings importar em CI (nao e producao).
@@ -36,7 +45,7 @@ jobs:
       - name: Instala o uv
         uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
-          python-version: "3.14"
+          python-version: ${{ matrix.python-version }}
           enable-cache: true
 
       - name: Sincroniza o ambiente (runtime + grupo dev)
@@ -65,7 +74,7 @@ jobs:
       - name: Instala o uv
         uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
-          python-version: "3.14"
+          python-version: "3.12"
           enable-cache: true
 
       - name: Sincroniza o ambiente
