@@ -1,6 +1,9 @@
 # Dependabot — varredura automática de dependências, consumida pelo GitHub
 # (sem CI próprio). Abre PRs de atualização de rotina; separado das security
 # updates (Dependabot alerts, ligadas em Settings > Security do repositório).
+# Agenda: domingo, 09:00 (America/Sao_Paulo). Cada ecossistema abre um único PR
+# agrupado com os bumps minor e patch; um major continua em PR próprio. As
+# security updates seguem o ritmo dos alertas e ignoram esta agenda.
 version: 2
 updates:
   # Dependências Python — diretas do pyproject.toml, grafo travado no uv.lock.
@@ -8,7 +11,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
+      day: "sunday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
@@ -17,13 +22,20 @@ updates:
       prefix-development: "build(deps-dev)"
     labels:
       - "dependencies"
+    groups:
+      uv-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
 
   # Actions pinadas nos workflows em .github/workflows/.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
+      day: "sunday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
@@ -31,3 +43,8 @@ updates:
       prefix: "build(ci)"
     labels:
       - "dependencies"
+    groups:
+      github-actions-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
