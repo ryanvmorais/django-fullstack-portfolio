@@ -107,7 +107,7 @@ uv.lock                # Lock único gerado por `uv lock` — todo o grafo pinad
 .env.example           # Template documentado de variáveis de ambiente (commitado no repo)
 .github/                # Serviços do GitHub (commitado)
   workflows/ci.yml       # CI: job "qualidade" (ruff/black/mypy/pytest) + job "seguranca" (pip-audit + check --deploy); em push na main e em PR
-  dependabot.yml         # PRs semanais de atualização de dependências (uv + github-actions)
+  dependabot.yml         # PRs de atualização de dependências aos domingos, agrupados por ecossistema (uv + github-actions)
   ISSUE_TEMPLATE/        # Formulário de dúvida, erro ou sugestão (+ config.yml sem issue em branco)
   pull_request_template.md  # Corpo padrão do PR: o quê/por quê e "Closes #N"
 specs/                  # Especificações (spec-driven development); ver specs/README.md
