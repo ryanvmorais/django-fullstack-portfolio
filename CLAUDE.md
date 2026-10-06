@@ -249,7 +249,7 @@ uv run pytest                              # 4. roda os testes
 `app_portfolio/tests.py` é um arquivo único (não uma pasta `tests/`) — o
 projeto tem uma única view e um punhado de models, não há volume que
 justifique a divisão em múltiplos arquivos por módulo testado (diferente do
-`hub-ryan-morais`, que tem um app bem maior).
+`site-ryan-morais`, que tem um app bem maior).
 
 **CI no GitHub Actions** (`.github/workflows/ci.yml`): roda em todo push na
 `main` e em todo `pull_request`, com dois jobs independentes: **`qualidade`**
