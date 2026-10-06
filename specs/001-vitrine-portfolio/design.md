@@ -87,7 +87,7 @@ Contexto da `home`:
 - **Porquê:** manter a lógica de imagem perto do model que a usa é mais direto
   neste projeto de apenas dois models com `ImageField`; um signal
   desacoplado ganharia sentido se o número de models crescesse (ver o mesmo
-  padrão em escala maior no `hub-ryan-morais`, que usa signal reusável entre
+  padrão em escala maior no `site-ryan-morais`, que usa signal reusável entre
   6 models).
 - **Trade-off:** duplicação do bloco `if novo_conteudo and novo_nome:` entre
   os dois `save()` — aceitável no tamanho atual do projeto.

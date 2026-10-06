@@ -44,7 +44,7 @@ origem: engenharia reversa do código existente (portfolio/settings.py)
       contínua de dependências que o `pip-audit` manual não substitui.
 - [x] `.github/workflows/ci.yml` criado com job `seguranca`
       (`pip-audit` + `manage.py check --deploy`), espelhando o padrão do
-      `hub-ryan-morais` — fecha a lacuna registrada como "pergunta em aberto"
+      `site-ryan-morais` — fecha a lacuna registrada como "pergunta em aberto"
       na versão inicial desta spec (CI não automatizava a checagem de
       deploy).
 - [x] Portão de qualidade completo. — `uv run ruff check .`,

@@ -33,7 +33,7 @@ alguém esquecer de configurar algo em produção.
 
 ## 3. Não-objetivos
 
-- 2FA no Admin (existe no `hub-ryan-morais`, spec 012; não implementado aqui —
+- 2FA no Admin (existe no `site-ryan-morais`, spec 012; não implementado aqui —
   ver "Perguntas em aberto").
 - Rate limit distribuído (Redis) — `LocMemCache` é suficiente no deploy atual
   (ver spec 002, ADR-04).

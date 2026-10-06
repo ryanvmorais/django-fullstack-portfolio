@@ -276,7 +276,7 @@ o IPython se disponível).
   `LocMemCache` (em memória, por processo); o deploy atual é um único
   processo, então não há estado a sincronizar entre workers.
 - **django-two-factor-auth / django-axes (2FA e brute-force no Admin)** —
-  usados no `hub-ryan-morais` (projeto irmão, maior), mas decisão explícita
+  usados no `site-ryan-morais` (projeto irmão, maior), mas decisão explícita
   de escala não trazer aqui: um único administrador, risco aceito (ver
   `specs/003-configuracao-seguranca/design.md`, ADR-04).
 - **DRF (Django REST Framework) ou qualquer API** — o projeto não expõe

@@ -53,7 +53,7 @@ Variáveis de ambiente consumidas por `settings.py` (documentadas em
 - **Decisão:** sem `settings/base.py` + `settings/dev.py` + `settings/prod.py`
   (padrão comum em projetos maiores); tudo em um arquivo, ramificado por
   `if not DEBUG:`.
-- **Alternativas:** múltiplos módulos de settings (usado no `hub-ryan-morais`
+- **Alternativas:** múltiplos módulos de settings (usado no `site-ryan-morais`
   via `settings_test.py` para os testes).
 - **Porquê:** projeto de escala pequena, um único app — a divisão em módulos
   adicionaria indireção sem benefício proporcional.
@@ -71,7 +71,7 @@ Variáveis de ambiente consumidas por `settings.py` (documentadas em
 - **Porquê:** antes da correção, `script-src` também tinha `'unsafe-inline'`
   sem necessidade real (nenhum `<script>` inline em nenhum template) — isso
   anulava boa parte do valor do CSP como defesa contra XSS.
-- **Alternativas futuras:** nonce por request (como o `hub-ryan-morais`, spec
+- **Alternativas futuras:** nonce por request (como o `site-ryan-morais`, spec
   010) resolveria também o `style-src`, mas exigiria mover a largura da barra
   de progresso para uma custom property CSS lida via `data-*` — fora do
   escopo desta sessão.
@@ -86,7 +86,7 @@ Variáveis de ambiente consumidas por `settings.py` (documentadas em
   direcionado que descubra a URL por outro meio (linkado, vazado em log,
   etc.). Complementar, não substituto, de uma senha forte.
 
-### ADR-04 — Sem 2FA no Admin (diferente do `hub-ryan-morais`)
+### ADR-04 — Sem 2FA no Admin (diferente do `site-ryan-morais`)
 
 - **Decisão:** autenticação do Admin é usuário/senha padrão do Django.
 - **Porquê:** escopo e público do projeto (portfólio pessoal, um único

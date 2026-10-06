@@ -82,7 +82,7 @@ Sem rota própria — o formulário faz POST para a própria URL da home
   gravação evita depender disso em qualquer superfície futura, ex.: uma
   API/export que reexiba `mensagem` sem escapar).
 - **Trade-off:** `bleach` é uma dependência a mais; `nh3` (usado no
-  `hub-ryan-morais`) seria uma alternativa mais moderna/rápida (Rust), mas
+  `site-ryan-morais`) seria uma alternativa mais moderna/rápida (Rust), mas
   trocar bibliotecas está fora do escopo desta sessão de modernização.
 
 ### ADR-03 — Rate limit ativado só após o envio (não a validação)
@@ -102,7 +102,7 @@ Sem rota própria — o formulário faz POST para a própria URL da home
 - **Trade-off:** um restart do processo zera todos os rate limits ativos;
   aceitável no volume de tráfego do projeto. Se o projeto crescer para
   múltiplos workers, precisaria migrar para Redis (mesma decisão documentada
-  no `hub-ryan-morais`, spec 012, que já enfrentou esse limite).
+  no `site-ryan-morais`, spec 012, que já enfrentou esse limite).
 
 ## 6. Impacto e dependências
 
