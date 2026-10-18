@@ -101,14 +101,17 @@ converte para `RGBA` só quando há transparência).
 ### whitenoise
 
 Serve os arquivos estáticos (CSS, JS, ícones) diretamente pelo processo
-Django, com compressão e cache-busting automáticos — sem precisar de um
+Django, com compressão (gzip) no `collectstatic` — sem precisar de um
 Nginx ou CDN dedicado.
 
 **Por que este:** o deploy é um único processo no PythonAnywhere; adicionar
 um servidor de estáticos separado seria complexidade desnecessária nessa
 escala.
 
-**Estudar:** `CompressedStaticFilesStorage`, o comando `collectstatic`
+**Estudar:** `CompressedStaticFilesStorage` (declarado em `STORAGES`, não no
+antigo `STATICFILES_STORAGE`) e a diferença para a
+`CompressedManifestStaticFilesStorage`, que também põe o hash no nome do arquivo;
+o comando `collectstatic`
 (obrigatório antes do deploy), a posição do `WhiteNoiseMiddleware` logo após
 o `SecurityMiddleware` em `MIDDLEWARE`.
 

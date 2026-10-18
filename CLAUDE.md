@@ -268,8 +268,10 @@ XFrameOptionsMiddleware → CSPMiddleware
 > revise `CSP_SCRIPT_SRC` antes — o navegador bloqueia silenciosamente (só no
 > console, sem erro no servidor). Ver `specs/003-configuracao-seguranca/`.
 
-**Arquivos estáticos:** WhiteNoise com `CompressedStaticFilesStorage`.
-`collectstatic` é obrigatório antes do deploy.
+**Arquivos estáticos:** WhiteNoise com `CompressedStaticFilesStorage`, declarado
+em `STORAGES["staticfiles"]`. Não use `STATICFILES_STORAGE`: o Django 6.1 ignora
+esse nome e os estáticos saem sem compressão (issue #38). `collectstatic` é
+obrigatório antes do deploy.
 
 **Banco de dados:** SQLite em desenvolvimento; PostgreSQL em produção via
 `psycopg2-binary` (extra `prod`), configurado manualmente em `DATABASES` (sem

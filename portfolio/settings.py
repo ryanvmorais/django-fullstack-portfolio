@@ -120,8 +120,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# WhiteNoise: Comprime e faz cache de arquivos estáticos para maior velocidade
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+# WhiteNoise: comprime os arquivos estáticos (gzip) no collectstatic.
+# O nome tem de ser STORAGES: o Django 6.1 ignora o antigo STATICFILES_STORAGE
+# (removido no 5.1), e com ele os estáticos saíam sem compressão (issue #38).
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
+}
 
 # --- 4. SEGURANÇA AVANÇADA (SÊNIOR) ---
 
