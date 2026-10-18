@@ -27,6 +27,7 @@ Este projeto foi estruturado para consolidar pilares fundamentais de engenharia 
 * **Segurança Ofensiva e Defensiva:** Implementação de *Honeypot* (armadilha para bots), *Rate Limit* (limitação de envios por IP) e integração com `bleach` para sanitização de HTML.
 * **Performance & Escala:** Uso de `select_related` e `prefetch_related` para mitigar o problema de consultas N+1, garantindo carregamento instantâneo.
 * **DevOps Mindset:** Estrutura de dependências dividida entre `local`, `base` e `production`, além de configurações rigorosas de CSP (Content Security Policy) e HSTS.
+* **Interface Auditada:** a home foi conferida em Chrome real (10 tamanhos de celular, axe-core, teclado, formulário) e corrigida com um teste por requisito: hero que cabe na primeira tela do celular, formulário que avisa o visitante em qualquer resposta do servidor, menu acessível, contraste, "reduzir movimento", fontes hospedadas no projeto e páginas de erro próprias (spec 004).
 * **Qualidade de Código:** Suíte de testes automatizados com `pytest` cobrindo fluxos de sucesso e tentativas de ataque.
 
 ---
