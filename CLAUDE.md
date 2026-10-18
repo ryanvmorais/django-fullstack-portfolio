@@ -131,9 +131,10 @@ docs/
    `CategoriaHabilidade`.
 2. **Identidade** — `Perfil` (sem constraint de singleton — convenção de uso,
    não regra de negócio; um segundo registro faria `Perfil.objects.first()`
-   retornar algo arbitrário). `foto`, `curriculo` e as redes (`link_linkedin`,
-   `link_github`, `link_instagram`, `link_facebook`, `link_x`, `link_tiktok`) são
-   opcionais: o template guarda cada um com `{% if %}`.
+   retornar algo arbitrário). `foto`, `curriculo`, `link_linkedin` e
+   `link_github` são opcionais: o template guarda cada um com `{% if %}`. As
+   redes do rodapé não vêm do `Perfil`: são seis links fixos de exemplo no
+   `base.html` (spec 004, ADR-04).
 3. **Portfólio** — `Projeto` (ordenado por `ordem`, M2M com `Tecnologia`,
    `categoria_projeto` opcional via `SET_NULL`, `link_github` opcional).
 4. **Habilidades** — `Habilidade` (FK `CategoriaHabilidade`, `progresso` 0-100

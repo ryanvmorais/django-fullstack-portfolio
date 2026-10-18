@@ -33,13 +33,10 @@ static/css/styles.css        # tokens, hero, menu, avisos, erro, toque, moviment
 static/fonts/                # novo: 2 woff2 + licenças OFL
 static/js/main.js            # reescrito: menu com inert, filtros com aria-pressed, avisos, formulário
 static/icons/                # favicon.webp (do emblema), default_perfil/projeto.webp, postgresql.svg
-templates/base.html          # fontes locais, og:image absoluta, nomes acessíveis, rodapé do perfil, avisos
+templates/base.html          # fontes locais, og:image absoluta, nomes acessíveis, títulos do rodapé em h2, avisos
 templates/home.html          # currículo, link e capa opcionais; nomes; filtros; contato do perfil
 templates/erro.html          # novo: base independente das páginas de erro
 templates/{404,403,500}.html # novos: estendem o erro.html
-app_portfolio/models.py      # Perfil: link_instagram, link_facebook, link_x, link_tiktok
-app_portfolio/migrations/0023_perfil_redes_sociais.py
-app_portfolio/admin.py       # bloco "Redes Sociais do Rodapé (opcionais)"
 app_portfolio/views.py       # MENSAGEM_* e messages nos fluxos HTML
 app_portfolio/test_interface.py   # novo: um grupo de testes por requisito
 portfolio/settings.py        # CSP sem Google Fonts
@@ -49,9 +46,8 @@ pyproject.toml               # override do mypy para o novo módulo de teste
 
 ## 3. Modelo de dados
 
-`Perfil` ganha quatro `URLField(blank=True, null=True)`: `link_instagram`,
-`link_facebook`, `link_x`, `link_tiktok`. A migração `0023` só adiciona colunas
-anuláveis; nenhum dado existente muda.
+Sem mudança. O `Perfil` e as migrações ficam como estavam (a última continua
+sendo a `0022`).
 
 ## 4. Interfaces
 
@@ -108,17 +104,19 @@ O `main.js` mostra `message` de toda resposta que não seja `ok` com
   corrige todos e mantém a hierarquia (cinza de apoio abaixo do cinza do texto).
 - **Trade-off:** o texto de apoio fica um pouco mais claro e perto do corpo.
 
-### ADR-04 — Redes do rodapé como campos opcionais do Perfil
+### ADR-04 — Redes do rodapé fixas
 
-- **Decisão:** quatro campos novos no `Perfil` (migração `0023`); o rodapé mostra
-  só as redes preenchidas, com LinkedIn e GitHub vindo dos campos que já existiam.
-- **Alternativas:** (a) deixar os links genéricos (facebook.com, instagram.com…);
-  (b) tirar as redes que o perfil não tem.
-- **Porquê:** os links genéricos levam o visitante à página inicial de cada site,
-  e o projeto já tinha o `Perfil` como fonte do contato. Os ícones continuam úteis
-  para quem usa o template.
-- **Trade-off:** uma migração, e o `RedeSocial` removido na `0017` volta em forma
-  mais simples. É decisão do Ryan e se desfaz tirando os campos.
+- **Decisão:** o rodapé continua com as seis redes escritas no `base.html`, iguais
+  para todo perfil. Só os títulos viram `h2` (RF-12).
+- **Alternativas:** (a) quatro campos opcionais no `Perfil`, com migração, para
+  mostrar só as redes preenchidas (foi a primeira versão desta spec); (b) tirar
+  as redes que o perfil não tem.
+- **Porquê:** o projeto é educativo e o rodapé é um exemplo de layout: quem usa o
+  template troca os endereços no HTML. Quatro campos e uma migração por causa de
+  links de exemplo pesam mais que o ganho. Foi decisão do Ryan, depois de ver a
+  alternativa (a) pronta.
+- **Trade-off:** os links levam à página inicial de cada rede, não a um perfil
+  real. O `base.html` avisa isso num comentário.
 
 ### ADR-05 — Fontes hospedadas, só latin e variáveis
 
@@ -197,11 +195,7 @@ O `main.js` mostra `message` de toda resposta que não seja `ok` com
 
 ## 6. Impacto e dependências
 
-- Uma migração (`0023`), só de colunas anuláveis; `uv run python manage.py
-  migrate` no deploy.
-- Quem tem `Perfil` salvo ganha o bloco de redes no admin; o rodapé fica sem a
-  coluna "Redes Sociais" até alguma ser preenchida (LinkedIn e GitHub continuam
-  aparecendo se já estavam).
+- Nenhuma migração: o deploy não precisa de `migrate` por causa desta spec.
 - A CSP fica mais estreita; nenhuma outra página carregava fonte externa.
 - Sem dependência nova.
 

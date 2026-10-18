@@ -13,8 +13,6 @@ origem: nova feature (auditoria de interface com a skill /auditoria-interface)
 
 ## Etapa 1 — Dados e servidor
 
-- [x] `app_portfolio/models.py`, `admin.py` e migração `0023`: quatro campos
-      opcionais de rede social no `Perfil`, com bloco próprio no admin. — RF-14, ADR-04
 - [x] `app_portfolio/views.py`: constantes `MENSAGEM_*`, mesma frase em JSON e em
       `messages`, e avisos nos fluxos HTML (sucesso, limite, inválido, falha). — RF-03, ADR-06
 - [x] `portfolio/settings.py`: CSP sem `fonts.googleapis.com` e `fonts.gstatic.com`. — RF-17, ADR-05
@@ -49,11 +47,11 @@ origem: nova feature (auditoria de interface com a skill /auditoria-interface)
 ## Etapa 4 — Templates
 
 - [x] `templates/base.html`: fontes locais e preload, `og:image` absoluta, tipo do
-      favicon, `aria-label` do logo, estado do hambúrguer, rodapé com `h2`, redes do
-      perfil e avisos no componente novo. — RF-03, RF-04, RF-11, RF-12, RF-14, RF-17, RF-20
+      favicon, `aria-label` do logo, estado do hambúrguer, rodapé com `h2` (redes
+      fixas, como antes) e avisos no componente novo. — RF-03, RF-04, RF-11, RF-12, RF-14, RF-17, RF-20
 - [x] `templates/home.html`: currículo, foto e link opcionais; nome do link do
       GitHub; capa decorativa; barras com nome; filtros com estado; `autocomplete`;
-      contato e rodapé vindos do perfil. — RF-01, RF-07, RF-09, RF-10, RF-11, RF-13, RF-14, RF-21
+      contato vindo do perfil. — RF-01, RF-07, RF-09, RF-10, RF-11, RF-13, RF-14, RF-21
 - [x] `templates/erro.html`, `404.html`, `403.html` e `500.html`. — RF-19, ADR-10
 - [x] Portão de qualidade. — axe-core 4.14.0: 0 violações em 390 e 1280 px; Tab sem
       parada invisível; 0 palavras órfãs
@@ -79,14 +77,14 @@ origem: nova feature (auditoria de interface com a skill /auditoria-interface)
       (duas sobreviveram na primeira rodada e os testes foram reforçados)
 - [x] Verificação no Chrome: hero em 10 tamanhos, contraste, Tab, menu, formulário,
       proporções e as páginas de erro com `DEBUG=False`. — RF-02, RF-03, RF-04, RF-05
-- [x] Portão de qualidade completo. — 88 passed (13 originais + 75 novos);
+- [x] Portão de qualidade completo. — 89 passed (13 originais + 76 novos);
       `ruff`, `black --check` e `mypy` verdes; `manage.py check` sem problemas
 
 ## Etapa 7 — Documentação
 
 - [x] Esta spec (`004-correcoes-de-interface/`) e o índice em `specs/README.md`. — origem
 - [x] `CLAUDE.md`, `README.md` e `docs/stack.md`: fontes locais, avisos, páginas
-      de erro, redes do perfil, testes de interface e as regras que não podem
+      de erro, testes de interface e as regras que não podem
       regredir. — RNF-01
 - [x] Portão de qualidade. — todo `RF-NN` e `ADR-NN` citado existe nos
       requisitos e no design

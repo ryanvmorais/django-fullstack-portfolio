@@ -183,7 +183,7 @@ Os principais:
   **When** o celular os preenche
   **Then** declaram `autocomplete="name"` e `autocomplete="email"`.
 
-### RF-14 — Sem texto provisório: contato e rodapé saem do perfil
+### RF-14 — Sem texto provisório: o contato sai do perfil; o rodapé é fixo
 
 - **Given** o perfil com LinkedIn e GitHub preenchidos
   **When** a home abre
@@ -191,9 +191,9 @@ Os principais:
   `www.` (antes: "/in/seu_usuario"), com `rel="noopener"`; o cartão some quando o
   campo está vazio.
 - **Given** as redes do rodapé (Facebook, Instagram, LinkedIn, X, TikTok, GitHub)
-  **When** a home abre
-  **Then** só aparecem as preenchidas no perfil, e a coluna "Redes Sociais" some
-  se nenhuma estiver.
+  **When** a home abre, com o perfil vazio ou preenchido
+  **Then** as seis aparecem sempre, com os mesmos endereços de exemplo no
+  `base.html` (o rodapé não lê o perfil), cada uma com `rel="noopener"`.
 - **Given** o logo do rodapé
   **When** o visitante clica
   **Then** vai para `#home` (antes `href="#"`).
@@ -291,9 +291,9 @@ Os principais:
 
 ## 6. Perguntas em aberto / decisões resolvidas
 
-1. **Redes do rodapé (RF-14):** viram campos opcionais do `Perfil` (migração
-   `0023`), em vez de sair do rodapé ou ficar fixas. Reversível: é decisão do
-   Ryan (ver ADR-04).
+1. **Redes do rodapé (RF-14):** ficam fixas, como estavam. A primeira versão
+   desta spec as tornou campos opcionais do `Perfil` (migração `0023`); o Ryan
+   preferiu o rodapé fixo e a migração saiu antes do merge (ver ADR-04).
 2. **Filtros e botão do GitHub em 14 px:** continuam menores que o corpo (16 px),
    na mesma família. A `/auditoria-interface` os sinaliza como `fonte_do_corpo`;
    foram tratados como chips e botões secundários (ver ADR-09).
