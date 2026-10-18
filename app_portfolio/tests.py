@@ -124,6 +124,12 @@ class TestPortfolioCore:
         with django_assert_max_num_queries(10):
             client.get(reverse("home"))
 
+    def test_estaticos_usam_o_storage_comprimido_do_whitenoise(self, settings) -> None:
+        """O storage dos estáticos vem de STORAGES (o STATICFILES_STORAGE é ignorado)."""
+        backend = settings.STORAGES["staticfiles"]["BACKEND"]
+        assert backend == "whitenoise.storage.CompressedStaticFilesStorage"
+        assert settings.STORAGES["default"]["BACKEND"].endswith("FileSystemStorage")
+
 
 # --- 3. TESTES DE SEGURANÇA ---
 
