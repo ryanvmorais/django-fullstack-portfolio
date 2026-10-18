@@ -33,7 +33,7 @@ prod = [
 [dependency-groups]
 dev = [
     "ruff>=0.17.0",
-    "black>=26.10.0",
+    "black>=26.10.1",
     "mypy>=2.4.0",
     "django-stubs[compatible-mypy]>=6.1.2",
     "ipython>=9.17.1",
