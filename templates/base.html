@@ -93,45 +93,31 @@
                     </ul>
                 </div>
                 
-                {# REDES: cada link sai do Perfil (admin) e só aparece se estiver preenchido; a coluna some se nenhum estiver (spec 004, RF-14) #}
-                {% if perfil.link_facebook or perfil.link_instagram or perfil.link_linkedin or perfil.link_x or perfil.link_tiktok or perfil.link_github %}
+                {# REDES: links fixos de exemplo, iguais para todo perfil; quem usa o template troca os endereços aqui (spec 004, RF-14) #}
                 <div class="footer__social">
                     <h2 class="footer__title">Redes Sociais</h2>
                     <div class="social__links">
                         {# SEGURANÇA: rel="noopener" é essencial ao usar target="_blank" para evitar vulnerabilidades #}
-                        {% if perfil.link_facebook %}
-                        <a href="{{ perfil.link_facebook }}" class="social__link" target="_blank" rel="noopener" aria-label="Facebook">
+                        <a href="https://www.facebook.com/" class="social__link" target="_blank" rel="noopener" aria-label="Facebook">
                             <img src="{% static 'icons/social/facebook.svg' %}" alt="" aria-hidden="true" width="24" height="24">
                         </a>
-                        {% endif %}
-                        {% if perfil.link_instagram %}
-                        <a href="{{ perfil.link_instagram }}" class="social__link" target="_blank" rel="noopener" aria-label="Instagram">
+                        <a href="https://www.instagram.com/" class="social__link" target="_blank" rel="noopener" aria-label="Instagram">
                             <img src="{% static 'icons/social/instagram.svg' %}" alt="" aria-hidden="true" width="24" height="24">
                         </a>
-                        {% endif %}
-                        {% if perfil.link_linkedin %}
-                        <a href="{{ perfil.link_linkedin }}" class="social__link" target="_blank" rel="noopener" aria-label="LinkedIn">
+                        <a href="https://www.linkedin.com/in/" class="social__link" target="_blank" rel="noopener" aria-label="LinkedIn">
                             <img src="{% static 'icons/social/linkedin.svg' %}" alt="" aria-hidden="true" width="24" height="24">
                         </a>
-                        {% endif %}
-                        {% if perfil.link_x %}
-                        <a href="{{ perfil.link_x }}" class="social__link" target="_blank" rel="noopener" aria-label="X">
+                        <a href="https://x.com/" class="social__link" target="_blank" rel="noopener" aria-label="X">
                             <img src="{% static 'icons/social/x.svg' %}" alt="" aria-hidden="true" width="24" height="24">
                         </a>
-                        {% endif %}
-                        {% if perfil.link_tiktok %}
-                        <a href="{{ perfil.link_tiktok }}" class="social__link" target="_blank" rel="noopener" aria-label="TikTok">
+                        <a href="https://www.tiktok.com/" class="social__link" target="_blank" rel="noopener" aria-label="TikTok">
                             <img src="{% static 'icons/social/tiktok.svg' %}" alt="" aria-hidden="true" width="24" height="24">
                         </a>
-                        {% endif %}
-                        {% if perfil.link_github %}
-                        <a href="{{ perfil.link_github }}" class="social__link" target="_blank" rel="noopener" aria-label="GitHub">
+                        <a href="https://github.com/" class="social__link" target="_blank" rel="noopener" aria-label="GitHub">
                             <img src="{% static 'icons/social/github.svg' %}" alt="" aria-hidden="true" width="24" height="24">
                         </a>
-                        {% endif %}
                     </div>
                 </div>
-                {% endif %}
             </div>
             
             <div class="footer__bottom">

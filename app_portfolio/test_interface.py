@@ -590,7 +590,7 @@ class TestFiltrosECampos:
 
 
 # ---------------------------------------------------------------------------
-# RF-14 — Sem texto provisório: contato e rodapé saem do perfil
+# RF-14 — Sem texto provisório: o contato sai do perfil; o rodapé é fixo
 # ---------------------------------------------------------------------------
 
 
@@ -623,18 +623,30 @@ class TestContatoERodape:
         _perfil()
         assert 'contact__card-title">LinkedIn' not in _home(client)
 
-    def test_rodape_mostra_so_as_redes_preenchidas(self, client) -> None:
-        """Só o X preenchido: só ele aparece, sem o link genérico das outras redes."""
-        _perfil(link_x="https://x.com/ana")
-        html = _home(client)
-        assert 'href="https://x.com/ana"' in html
-        assert 'aria-label="Facebook"' not in html
-        assert 'href="https://www.facebook.com/"' not in html
-
-    def test_coluna_de_redes_some_sem_nenhuma_rede(self, client) -> None:
-        """Sem rede nenhuma, o rodapé não mostra a coluna "Redes Sociais"."""
+    def test_rodape_tem_as_seis_redes_fixas(self, client) -> None:
+        """O rodapé é fixo: as seis redes aparecem mesmo com o perfil vazio."""
         _perfil()
-        assert "Redes Sociais" not in _home(client)
+        html = _home(client)
+        for rede in ("Facebook", "Instagram", "LinkedIn", "X", "TikTok", "GitHub"):
+            assert f'aria-label="{rede}"' in html
+        assert "Redes Sociais" in html
+
+    def test_redes_do_rodape_nao_dependem_do_perfil(self, client) -> None:
+        """Preencher LinkedIn e GitHub no perfil não muda os links do rodapé."""
+        _perfil(
+            link_linkedin="https://www.linkedin.com/in/ana",
+            link_github="https://github.com/ana",
+        )
+        html = _home(client)
+        rodape = html[html.index('<div class="footer__social">') :]
+        assert 'href="https://www.linkedin.com/in/"' in rodape
+        assert 'href="https://github.com/"' in rodape
+        assert "linkedin.com/in/ana" not in rodape
+
+    def test_perfil_nao_tem_campos_de_rede_do_rodape(self) -> None:
+        """Os campos que o rodapé dinâmico usava não existem mais no modelo."""
+        nomes = {campo.name for campo in Perfil._meta.get_fields()}
+        assert not nomes & {"link_instagram", "link_facebook", "link_x", "link_tiktok"}
 
     def test_logo_do_rodape_leva_ao_topo(self, client) -> None:
         """O logo do rodapé aponta para #home, não para href="#"."""
