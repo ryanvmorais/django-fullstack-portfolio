@@ -50,9 +50,11 @@ requirements.md  ──(aprovação)──▶  design.md  ──(aprovação)─
 ```
 
 Não se avança de fase sem o "ok" humano — esse é o fluxo para **features
-novas**. As três specs atuais foram reconstruídas por **engenharia reversa** de
+novas**. As specs 001 a 003 foram reconstruídas por **engenharia reversa** de
 um projeto já funcionando (exceção documentada na skill `/spec`), então já
-nascem com `status: concluído` e `tasks.md` inteiramente `[x]`.
+nascem com `status: concluído` e `tasks.md` inteiramente `[x]`. A 004 nasceu de
+uma auditoria de interface e foi escrita junto da correção, a pedido do Ryan
+("aplique tudo conforme recomendado"), sem as pausas de aprovação entre as fases.
 
 ## Como usar (com Claude Code)
 
@@ -73,8 +75,9 @@ Sem o Claude Code, os mesmos documentos guiam qualquer dev ou IA — são só Ma
 | 001 | [vitrine-portfolio](001-vitrine-portfolio/) | concluído | Perfil, projetos, tecnologias, habilidades e estatísticas na home |
 | 002 | [formulario-contato](002-formulario-contato/) | concluído | Honeypot, rate limit, sanitização XSS e notificação por e-mail |
 | 003 | [configuracao-seguranca](003-configuracao-seguranca/) | concluído | Settings, CSP, admin ofuscado, hardening de produção e CI de segurança |
+| 004 | [correcoes-de-interface](004-correcoes-de-interface/) | concluído | Correções da auditoria de interface: hero no celular, formulário com retorno, menu, contraste, avisos, fontes locais, páginas de erro e imagens novas |
 
-> As três specs foram reconstruídas por **engenharia reversa** do código
+> As specs 001 a 003 foram reconstruídas por **engenharia reversa** do código
 > existente, nesta sessão de modernização (2026-09-11), que também incluiu uma
 > auditoria de segurança completa e a migração de `pip` para `uv`.
 
@@ -101,3 +104,23 @@ problema já corrigido. Leia antes de mexer nos arquivos citados.
   do `ModelForm`. Criar um `MensagemContato` diretamente por código
   (`.objects.create(...)`, como em fixtures de teste) **não** aciona o
   validador — é esperado, não um bug a corrigir.
+- **`styles.css` e `main.js` sem Prettier** (spec [004](004-correcoes-de-interface/)):
+  os dois arquivos usam 4 espaços e aspas simples. Rodar o Prettier (ou deixar o
+  editor formatar ao salvar) reescreve o arquivo inteiro e apaga o diff real da
+  mudança. Edite só o trecho.
+- **Menu do celular: o corte de 768 px vale nos dois lados** (spec
+  [004](004-correcoes-de-interface/), ADR-02): `MENU_DE_CELULAR` no `main.js` e o
+  `@media (max-width: 768px)` do painel em `styles.css` precisam do mesmo valor.
+  Com valores diferentes, o painel fica `inert` num tamanho em que o CSS o mostra,
+  ou o contrário. O foco volta ao hambúrguer **antes** de o painel virar `inert`
+  (elemento focado que fica inerte perde o foco); o `test_interface.py` guarda a
+  ordem.
+- **`test_interface.py` lê o CSS e o JavaScript como texto** (spec
+  [004](004-correcoes-de-interface/)): o bloco `prefers-reduced-motion` tem de ser
+  o último do `styles.css` (vence o hover e as animações de cima) e as regras são
+  achadas pelo texto exato do seletor. Ao reordenar ou renomear no CSS, ajuste o
+  teste junto; o teste que falha diz qual regra sumiu.
+- **Dado opcional nunca vai sem `{% if %}`** (spec [004](004-correcoes-de-interface/),
+  RF-01 e RF-10): `{{ perfil.curriculo.url }}` levanta `ValueError` sem arquivo e
+  derruba a home com erro 500; `{{ projeto.link_github }}` vazio vira `href="None"`.
+  Campo com `blank=True` pede a guarda no template e um teste com o campo vazio.

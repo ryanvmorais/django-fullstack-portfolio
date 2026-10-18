@@ -137,9 +137,11 @@ carregar/executar script, estilo e imagem.
 **Por que este:** é a integração padrão de CSP para Django; escrever o header
 manualmente em um middleware próprio duplicaria uma solução já testada.
 
-**Estudar:** as diretivas `default-src`/`script-src`/`style-src`, por que
-`'unsafe-inline'` enfraquece a defesa contra XSS (corrigido em `script-src`
+**Estudar:** as diretivas `default-src`/`script-src`/`style-src`/`font-src`, por
+que `'unsafe-inline'` enfraquece a defesa contra XSS (corrigido em `script-src`
 na auditoria de segurança desta sessão — ver `specs/003-configuracao-seguranca/`).
+Desde a spec 004 as fontes vêm do próprio site, então `style-src` e `font-src`
+não citam mais o Google.
 
 **Docs:** [django-csp.readthedocs.io](https://django-csp.readthedocs.io/)
 
@@ -264,6 +266,8 @@ o IPython se disponível).
 | `psycopg2-binary` (extra `prod`) | Driver PostgreSQL para produção (dev usa SQLite) |
 | `asgiref`, `sqlparse`, `tzdata` | Dependências transitivas do próprio Django, não importadas diretamente |
 | `webencodings` | Dependência transitiva do `bleach` |
+| Inter e JetBrains Mono (`static/fonts/`) | Fontes do texto e do código, hospedadas no projeto em arquivo variável (latin, `font-display: swap`) em vez do Google Fonts: sem requisição de terceiros (LGPD) e sem CSS externo bloqueando a primeira pintura (spec 004, ADR-05). Licença OFL ao lado dos arquivos |
+| axe-core (só nas auditorias) | Verificador de acessibilidade rodado em navegador real pela skill `/auditoria-interface`; não é dependência do projeto, e as regras que ele achou viraram testes em `app_portfolio/test_interface.py` |
 
 ---
 
@@ -288,3 +292,7 @@ o IPython se disponível).
 - **Node.js / bundler de frontend** — `static/js/main.js` é JavaScript
   vanilla servido diretamente pelo `whitenoise`; não há build step de
   frontend.
+- **Google Fonts** — saiu na spec 004: as fontes ficam em `static/fonts/`.
+- **Prettier no `styles.css` e no `main.js`** — os dois arquivos mantêm 4
+  espaços e aspas simples; um formatador automático reescreveria o arquivo inteiro
+  a cada edição (ver `specs/README.md`, notas de manutenção).

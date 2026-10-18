@@ -1,0 +1,28 @@
+{% load static %}
+{# PÁGINA DE ERRO BASE: HTML completo e independente (não herda o base.html). Serve ao 404.html, 403.html e 500.html, que o Django procura sozinho com DEBUG=False (spec 004, RF-19). #}
+{# Não depende de banco, de sessão nem de contexto: o 500 é renderizado justamente quando algo falhou, e o base.html consulta o perfil. Sem JavaScript. #}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Erro{% endblock %} | Portfólio</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#0a1628">
+
+    <link rel="icon" type="image/webp" href="{% static 'icons/favicon.webp' %}">
+    <link rel="stylesheet" href="{% static 'css/fontes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <main id="main-content" class="erro">
+        <div class="erro__container container">
+            {# O número é só decorativo: o h1 já diz o que aconteceu #}
+            <p class="erro__codigo" aria-hidden="true">{% block codigo %}{% endblock %}</p>
+            <h1 class="erro__titulo">{% block titulo_pagina %}{% endblock %}</h1>
+            <p class="erro__texto">{% block texto %}{% endblock %}</p>
+            <a href="/" class="btn btn--primary">Voltar para a página inicial</a>
+        </div>
+    </main>
+</body>
+</html>

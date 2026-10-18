@@ -16,13 +16,18 @@
     --color-accent: #00d4ff;            /* Ciano neon */
     --color-accent-hover: #00b8e6;      /* Ciano neon hover */
     --color-accent-glow: rgba(0, 212, 255, 0.3);
+
+    /* Avisos do formulário: texto claro com 5,3:1 ou mais (spec 004, RF-06) */
+    --color-success: #047857;
+    --color-error: #b91c1c;
+    --color-info: #1d4ed8;
     
     /* Neutrals */
     --color-white: #f8fafc;             /* Off-white */
     --color-gray-100: #e2e8f0;
     --color-gray-200: #cbd5e1;
     --color-gray-300: #94a3b8;
-    --color-gray-400: #64748b;
+    --color-gray-400: #8393aa;          /* 4,67:1 sobre o cartão, o pior fundo: texto de apoio (spec 004, RF-05) */
     --color-gray-500: #475569;
     
     /* Background variations */
@@ -107,6 +112,28 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Anel de foco para quem navega por teclado (spec 004, RF-04). :focus-visible
+   não aparece no clique do mouse; substitui a classe .keyboard-nav que o main.js
+   alternava. Os campos do formulário têm o próprio anel (.form__input:focus). */
+:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Títulos equilibrados e parágrafos sem palavra sozinha na última linha
+   (spec 004, RF-23). */
+h1,
+h2,
+h3,
+h4 {
+    text-wrap: balance;
+}
+
+p,
+li {
+    text-wrap: pretty;
+}
+
 img {
     max-width: 100%;
     height: auto;
@@ -188,11 +215,14 @@ textarea {
     align-items: center;
     justify-content: center;
     gap: var(--spacing-sm);
-    padding: var(--spacing-md) var(--spacing-xl);
+    padding: 0.875rem var(--spacing-xl);
     font-size: var(--fs-base);
     font-weight: 500;
     border-radius: var(--radius-lg);
-    transition: all var(--transition-base);
+    /* Borda de 2px transparente: o primário e o secundário têm a mesma altura (spec 004, RF-16) */
+    border: 2px solid transparent;
+    transition: transform var(--transition-base), box-shadow var(--transition-base),
+        border-color var(--transition-base), color var(--transition-base);
 }
 
 .btn--primary {
@@ -209,7 +239,7 @@ textarea {
 .btn--secondary {
     background: transparent;
     color: var(--color-white);
-    border: 2px solid var(--color-gray-500);
+    border-color: var(--color-gray-500);
 }
 
 .btn--secondary:hover {
@@ -243,7 +273,7 @@ textarea {
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 1000;
-    transition: all var(--transition-base);
+    transition: background var(--transition-base), box-shadow var(--transition-base);
 }
 
 .header.scrolled {
@@ -319,6 +349,8 @@ textarea {
         width: 80%;
         max-width: 320px;
         height: 100vh;
+        /* dvh acompanha a barra do navegador do celular; vh fica de reserva (RF-15) */
+        height: 100dvh;
         background: var(--color-bg-secondary);
         padding: var(--spacing-4xl) var(--spacing-xl);
         transition: right var(--transition-slow);
@@ -331,16 +363,27 @@ textarea {
 
     .nav__list {
         flex-direction: column;
-        gap: var(--spacing-lg);
+        gap: var(--spacing-sm);
     }
 
+    /* Alvo de toque de 44px (RF-18); o sublinhado acompanha o texto, não a caixa */
     .nav__link {
+        display: inline-block;
+        padding-block: 0.5rem;
         font-size: var(--fs-lg);
+    }
+
+    .nav__link::after {
+        bottom: 0.25rem;
     }
 
     .nav__toggle,
     .nav__close {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
     }
 
     .nav__close {
@@ -355,6 +398,8 @@ textarea {
    ======================================== */
 .hero {
     min-height: 100vh;
+    /* svh é a altura com a barra do navegador do celular visível (RF-02, RF-15) */
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -532,39 +577,51 @@ textarea {
 }
 
 /* Hero Responsive */
+/* Spec 004, RF-02: título, botões e números precisam caber na primeira tela do
+   celular. O bloco de código é decorativo (aria-hidden): vem depois do texto e
+   some no celular, onde antes empurrava o nome para além da metade da tela. */
 @media (max-width: 1024px) {
     .hero__scroll {
-        display: none; 
+        display: none;
     }
-    
+
     .hero__container {
         grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+        padding-block: var(--spacing-xl) var(--spacing-2xl);
         text-align: center;
+    }
+
+    .hero__title {
+        margin-bottom: var(--spacing-md);
     }
 
     .hero__description {
         margin-left: auto;
         margin-right: auto;
+        margin-bottom: var(--spacing-lg);
     }
 
     .hero__buttons {
         justify-content: center;
+        margin-bottom: var(--spacing-xl);
     }
 
+    /* As três estatísticas ficam numa linha em vez de quebrar em 2 + 1 */
     .hero__stats {
-        justify-content: center;
-    }
-
-    .hero__visual {
-        order: -1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-md);
+        max-width: 520px;
+        margin-inline: auto;
     }
 }
 
 @media (max-width: 640px) {
-    .hero__scroll {
-        display: none; 
+    .hero__visual {
+        display: none;
     }
-    
+
     .hero__name {
         font-size: var(--fs-4xl);
     }
@@ -577,9 +634,15 @@ textarea {
         flex-direction: column;
     }
 
-    .hero__stats {
-        flex-wrap: wrap;
-        gap: var(--spacing-lg);
+    .hero__stat-label {
+        font-size: var(--fs-xs);
+    }
+}
+
+/* Celular deitado: a tela tem ~340px de altura, nada decorativo cabe */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero__visual {
+        display: none;
     }
 }
 
@@ -730,7 +793,8 @@ textarea {
     background: transparent;
     border: 1px solid var(--color-gray-500);
     border-radius: var(--radius-full);
-    transition: all var(--transition-base);
+    transition: color var(--transition-base), background var(--transition-base),
+        border-color var(--transition-base);
 }
 
 .filter-btn:hover,
@@ -752,7 +816,8 @@ textarea {
     border-radius: var(--radius-xl);
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base), border-color var(--transition-base),
+        box-shadow var(--transition-base);
 }
 
 .project-card:hover {
@@ -776,41 +841,6 @@ textarea {
 
 .project-card:hover .project-card__image img {
     transform: scale(1.1);
-}
-
-.project-card__overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 22, 40, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-md);
-    opacity: 0;
-    transition: opacity var(--transition-base);
-}
-
-.project-card:hover .project-card__overlay {
-    opacity: 1;
-}
-
-.project-card__link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    background: var(--color-accent);
-    border-radius: var(--radius-full);
-    transition: transform var(--transition-fast);
-}
-
-.project-card__link:hover {
-    transform: scale(1.1);
-}
-
-.project-card__link img {
-    filter: brightness(0);
 }
 
 .project-card__content {
@@ -992,7 +1022,8 @@ textarea {
     height: 70px;
     background: var(--color-bg-tertiary);
     border-radius: var(--radius-lg);
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base), background var(--transition-base),
+        box-shadow var(--transition-base);
 }
 
 .skills__icon:hover {
@@ -1035,7 +1066,7 @@ textarea {
     background: var(--color-bg-card);
     border-radius: var(--radius-lg);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all var(--transition-base);
+    transition: border-color var(--transition-base), transform var(--transition-base);
 }
 
 .contact__card:hover {
@@ -1100,7 +1131,7 @@ textarea {
     background: var(--color-bg-tertiary);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-md);
-    transition: all var(--transition-base);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .form__input:focus,
@@ -1112,7 +1143,7 @@ textarea {
 
 .form__input::placeholder,
 .form__textarea::placeholder {
-    color: var(--color-gray-500);
+    color: var(--color-gray-400);
 }
 
 .form__textarea {
@@ -1141,7 +1172,7 @@ textarea {
     grid-template-columns: 1fr 1fr 1fr;
     gap: var(--spacing-3xl);
     margin-bottom: var(--spacing-2xl);
-    align-items: center;
+    align-items: start;
 }
 
 .footer__logo {
@@ -1170,6 +1201,7 @@ textarea {
 .footer__list {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--spacing-sm);
 }
 
@@ -1201,7 +1233,8 @@ textarea {
     background: var(--color-bg-card);
     border-radius: var(--radius-md);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all var(--transition-base);
+    transition: background var(--transition-base), border-color var(--transition-base),
+        transform var(--transition-base);
 }
 
 .social__link:hover {
@@ -1216,7 +1249,7 @@ textarea {
 
 .social__link img {
     opacity: 0.7;
-    transition: all var(--transition-base);
+    transition: opacity var(--transition-base), filter var(--transition-base);
 }
 
 /* Footer Bottom */
@@ -1230,7 +1263,7 @@ textarea {
 
 .footer__copyright {
     font-size: var(--fs-sm);
-    color: var(--color-gray-500);
+    color: var(--color-gray-400);
     justify-content: center;
 }
 
@@ -1244,6 +1277,10 @@ textarea {
 
     .footer__description {
         margin: 0 auto;
+    }
+
+    .footer__list {
+        align-items: center;
     }
 
     .social__links {
@@ -1275,7 +1312,8 @@ textarea {
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
-    transition: all var(--transition-base);
+    transition: opacity var(--transition-base), visibility var(--transition-base),
+        transform var(--transition-base), background var(--transition-base);
     z-index: 999;
 }
 
@@ -1295,8 +1333,92 @@ textarea {
 }
 
 /* ========================================
+   Notifications
+   ======================================== */
+/* Avisos do formulário de contato. main.js (mostrarNotificacao) cria o contêiner e
+   os avisos do fluxo AJAX; o bloco de mensagens do base.html usa as mesmas classes
+   no fluxo HTML tradicional (spec 004, RF-03, RF-06). O contêiner é uma região
+   role="status": o leitor de tela anuncia o aviso. */
+.notifications {
+    position: fixed;
+    right: var(--spacing-lg);
+    bottom: 6.25rem;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    max-width: calc(100vw - 2 * var(--spacing-lg));
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--color-info);
+    color: var(--color-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    animation: slideInRight 0.3s ease;
+}
+
+.notification--success {
+    background: var(--color-success);
+}
+
+.notification--error {
+    background: var(--color-error);
+}
+
+.notification__message {
+    overflow-wrap: anywhere;
+}
+
+/* Botão de fechar com área de toque de 44px; a margem negativa devolve o espaço
+   que a área maior ocupa, para o aviso não crescer */
+.notification__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: -0.5rem -0.75rem -0.5rem 0;
+    color: inherit;
+    font-size: var(--fs-2xl);
+    line-height: 1;
+}
+
+/* .notification--leaving é aplicada por fecharNotificacao() em main.js */
+.notification--leaving {
+    animation: slideOutRight 0.3s ease forwards;
+}
+
+/* ========================================
    Animations
    ======================================== */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -1333,7 +1455,7 @@ textarea {
 .reveal {
     opacity: 0;
     transform: translateY(50px);
-    transition: all 0.8s ease;
+    transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .reveal.active {
@@ -1365,6 +1487,9 @@ textarea {
    Botão Ver no GitHub
    ======================================== */
 .btn-github {
+    /* Contém o .sr-only do nome do projeto (spec 004, RF-10): sem ancestral
+       posicionado, o texto escondido ficava solto no cartão */
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1378,7 +1503,8 @@ textarea {
     font-weight: 500;
     border-radius: var(--radius-md);
     border: 1px solid rgba(0, 212, 255, 0.3); /* Borda sutil com seu ciano */
-    transition: all var(--transition-base);
+    transition: background var(--transition-base), color var(--transition-base),
+        transform var(--transition-base), border-color var(--transition-base);
 }
 
 .btn-github img {
@@ -1396,4 +1522,122 @@ textarea {
 .btn-github:hover img {
     /* Ícone fica preto no hover para contrastar com o fundo ciano */
     filter: brightness(0);
+}
+
+
+/* ========================================
+   Páginas de erro
+   ======================================== */
+/* 404.html, 403.html e 500.html (via erro.html): uma coluna centralizada sobre o
+   mesmo fundo do hero. Spec 004, RF-19. */
+.erro {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+        var(--color-bg-primary);
+}
+
+.erro__container {
+    padding-block: var(--spacing-4xl);
+}
+
+.erro__codigo {
+    font-family: var(--font-mono);
+    font-size: clamp(var(--fs-5xl), 18vw, 8rem);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--color-accent);
+}
+
+.erro__titulo {
+    margin: var(--spacing-md) 0;
+    font-size: var(--fs-4xl);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-white);
+}
+
+.erro__texto {
+    max-width: 32rem;
+    margin: 0 auto var(--spacing-xl);
+    font-size: var(--fs-lg);
+    color: var(--color-gray-300);
+}
+
+/* ========================================
+   Alvos de toque
+   ======================================== */
+/* Spec 004, RF-18: em tela de toque (pointer: coarse) os controles pequenos
+   chegam a 44px; com mouse, o tamanho compacto continua. */
+@media (pointer: coarse) {
+    .filter-btn {
+        min-height: 2.75rem;
+    }
+
+    .footer__link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.75rem;
+    }
+
+    .contact__card-link {
+        display: inline-block;
+        padding-block: 0.75rem;
+    }
+
+    .social__link {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+}
+
+
+/* ========================================
+   Movimento reduzido
+   ======================================== */
+/* Spec 004, RF-08: quem pede "reduzir movimento" no sistema não vê animação
+   contínua, rolagem suave nem elevação ao passar o mouse. Fica no fim do
+   arquivo para vencer as regras acima. main.js pergunta o mesmo critério em
+   comportamentoDeRolagem(). */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .hero__visual,
+    .scroll-indicator {
+        animation: none;
+    }
+
+    /* .reveal nasce com opacity 0 e só ganha .active ao entrar na tela */
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+
+    .btn:hover,
+    .btn-github:hover,
+    .project-card:hover,
+    .skills__category:hover,
+    .skills__icon:hover,
+    .contact__card:hover,
+    .social__link:hover,
+    .back-to-top:hover,
+    .btn:hover img,
+    .project-card:hover .project-card__image img,
+    .about__image-container:hover .about__image {
+        transform: none;
+    }
 }

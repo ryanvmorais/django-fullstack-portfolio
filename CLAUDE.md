@@ -92,15 +92,22 @@ app_portfolio/        # A única aplicação
   admin.py             # Admin customizado para cada modelo
   utils.py             # converter_para_webp() — conversor universal de imagem
   urls.py              # URLs da aplicação (só a home)
-  tests.py             # Suíte de testes (pytest) — um arquivo só, ver "Qualidade" abaixo
+  tests.py             # Suíte de testes (pytest): modelos, view e segurança do contato, ver "Qualidade" abaixo
+  test_interface.py    # Testes das correções da auditoria de interface (spec 004): HTML, view, páginas de erro, CSS e JS lidos como texto
   migrations/
 templates/            # Templates HTML na raiz do projeto (não dentro de app_portfolio)
   base.html
   home.html            # Única página: Hero, Sobre, Projetos, Habilidades, Contato
+  erro.html            # Base independente das páginas de erro (não herda o base.html)
+  404.html             # Página não encontrada (estende erro.html)
+  403.html             # Ação não permitida (estende erro.html)
+  500.html             # Erro do servidor, sem banco e sem contexto (estende erro.html)
 static/
-  css/styles.css
-  js/main.js           # JavaScript vanilla (menu mobile, formulário AJAX, notificações, filtros)
-  icons/                # SVGs de UI, tecnologias e redes sociais
+  css/styles.css       # Folha única (4 espaços, aspas simples): tokens, seções, avisos, erro, toque, movimento reduzido
+  css/fontes.css       # @font-face de Inter e JetBrains Mono (hospedadas em static/fonts/)
+  fonts/               # woff2 variáveis (latin) + licenças OFL
+  js/main.js           # JavaScript vanilla (menu mobile com inert, filtros, avisos, formulário AJAX)
+  icons/                # SVGs de UI, tecnologias e redes sociais; default_perfil/default_projeto.webp (reserva) e favicon.webp
 pyproject.toml         # Gerenciado com uv. [project]=runtime, [dependency-groups].dev, [project.optional-dependencies].prod + config das ferramentas (ruff, black, mypy, pytest)
 uv.lock                # Lock único gerado por `uv lock` — todo o grafo pinado (NUNCA editar à mão)
 .venv/                 # Ambiente virtual gerenciado pelo uv (gitignored; criado por `uv sync`)
@@ -124,7 +131,10 @@ docs/
    `CategoriaHabilidade`.
 2. **Identidade** — `Perfil` (sem constraint de singleton — convenção de uso,
    não regra de negócio; um segundo registro faria `Perfil.objects.first()`
-   retornar algo arbitrário).
+   retornar algo arbitrário). `foto`, `curriculo`, `link_linkedin` e
+   `link_github` são opcionais: o template guarda cada um com `{% if %}`. As
+   redes do rodapé não vêm do `Perfil`: são seis links fixos de exemplo no
+   `base.html` (spec 004, ADR-04).
 3. **Portfólio** — `Projeto` (ordenado por `ordem`, M2M com `Tecnologia`,
    `categoria_projeto` opcional via `SET_NULL`, `link_github` opcional).
 4. **Habilidades** — `Habilidade` (FK `CategoriaHabilidade`, `progresso` 0-100
@@ -171,7 +181,11 @@ sequência:
    (`logger.exception`), nunca propaga — a mensagem já salva no banco não é
    perdida.
 6. **Resposta híbrida** — header `X-Requested-With: XMLHttpRequest` decide
-   entre `JsonResponse` (AJAX) e `redirect`/`messages` (HTML tradicional).
+   entre `JsonResponse` (AJAX) e `redirect`/`messages` (HTML tradicional). Os dois
+   fluxos dizem a mesma frase (`MENSAGEM_ENVIADO`, `MENSAGEM_LIMITE_ENVIO`,
+   `MENSAGEM_DADOS_INVALIDOS`, `MENSAGEM_FALHA_ENVIO`, em `views.py`): o
+   `main.js` mostra o `message` de toda resposta que não seja sucesso, e o
+   `base.html` mostra as `messages` no mesmo componente `.notification`.
 
 Ver `specs/002-formulario-contato/` para os critérios de aceite completos e
 os ADRs (por que honeypot+rate limit em vez de CAPTCHA, por que o rate limit
@@ -183,6 +197,48 @@ ativa só após o envio, etc.).
 > tentaria conectar ao SMTP real do Gmail configurado em `settings.py` a cada
 > teste — lento, dependente de rede, e capaz de enviar e-mail de verdade se o
 > `.env` local tiver credenciais reais.
+
+### Interface e acessibilidade (spec 004)
+
+A home foi auditada em Chrome real (10 tamanhos de celular, 768 e 1280 px,
+axe-core, Tab, formulário) e corrigida na spec `004-correcoes-de-interface`. As
+regras que ficaram, e que um ajuste "inofensivo" desfaria:
+
+- **Hero no celular:** título, botões e estatísticas cabem na primeira tela. O
+  bloco de código (`.hero__visual`, decorativo, `aria-hidden`) vem **depois** do
+  texto e some abaixo de 640 px e em celular deitado; as três estatísticas ficam
+  numa grade de 3 colunas.
+- **Menu do celular:** o painel `#nav-menu` é `inert` enquanto fechado (só no
+  celular, por `matchMedia` no `main.js`); ao abrir, o foco vai ao primeiro link e
+  o resto da página fica inerte; Esc e o botão de fechar devolvem o foco ao
+  hambúrguer. **O corte de 768 px é o mesmo no JS e no CSS.**
+- **Contraste:** o texto de apoio usa `--color-gray-400` (#8393aa, 4,67:1 no pior
+  fundo). `--color-gray-500` é só cor de borda, nunca de texto.
+- **Avisos:** um componente só, `.notification`, para o `main.js` (AJAX) e para as
+  `messages` do `base.html` (sem JavaScript). O de erro leva `role="alert"` e fica
+  até ser fechado.
+- **Movimento reduzido:** o bloco `prefers-reduced-motion` é o **último** do
+  `styles.css` e a rolagem do JS passa por `comportamentoDeRolagem()`. Nada de
+  `behavior: 'smooth'` solto nem de `transition: all`.
+- **Fontes:** Inter e JetBrains Mono em `static/fonts/` (`fontes.css`); o Google
+  Fonts não está mais na CSP nem nos templates.
+- **Imagens:** capas de projeto em 1280 x 800 (16:10), foto de perfil em 960 x 1200
+  (4:5), WebP q80, nome de arquivo com palavras-chave. As imagens de reserva
+  (`default_perfil.webp`, `default_projeto.webp`) e o `favicon.webp` ficam em
+  `static/icons/` e não têm a marca d'água do Gemini.
+- **Páginas de erro:** `404.html`, `403.html` e `500.html` estendem o `erro.html`,
+  independente do `base.html` (sem banco, sem JavaScript). Só aparecem com
+  `DEBUG=False`; com `DEBUG=True` o Django mostra a página técnica.
+
+> ⚠️ **Não regredir (dado opcional):** `foto`, `curriculo`, `link_github` do
+> projeto e as redes do `Perfil` são opcionais. `{{ perfil.curriculo.url }}` sem
+> `{% if perfil.curriculo %}` levanta `ValueError` e a home inteira dá erro 500;
+> `{{ projeto.link_github }}` sem guarda vira `href="None"`. Campo com
+> `blank=True` pede a guarda no template e um teste com o campo vazio.
+
+> ⚠️ **Não regredir (formatador):** `styles.css` e `main.js` usam 4 espaços e
+> aspas simples. Rodar o Prettier no arquivo inteiro reescreve tudo e apaga o diff
+> real; edite só o trecho. Ver `specs/README.md`, notas de manutenção.
 
 ### Configurações notáveis (em `portfolio/settings.py`)
 
@@ -203,7 +259,8 @@ XFrameOptionsMiddleware → CSPMiddleware
 - CSP via `django-csp`: `script-src 'self'` (sem `'unsafe-inline'` — corrigido
   na auditoria desta modernização, nenhum template usa script inline);
   `style-src` mantém `'unsafe-inline'` (2 atributos `style=""` inline na
-  barra de progresso de habilidades)
+  barra de progresso de habilidades); as fontes vêm de `'self'` (spec 004: o
+  Google Fonts saiu de `style-src` e `font-src`)
 - URL do Admin ofuscada via `ADMIN_URL` (defesa em profundidade, não
   substitui autenticação forte)
 
@@ -246,10 +303,13 @@ uv run mypy app_portfolio portfolio        # 3. checa tipos (NÃO altera, só re
 uv run pytest                              # 4. roda os testes
 ```
 
-`app_portfolio/tests.py` é um arquivo único (não uma pasta `tests/`) — o
+Os testes ficam em dois arquivos ao lado do código, não numa pasta `tests/` — o
 projeto tem uma única view e um punhado de models, não há volume que
-justifique a divisão em múltiplos arquivos por módulo testado (diferente do
-`site-ryan-morais`, que tem um app bem maior).
+justifique a divisão por módulo testado (diferente do `site-ryan-morais`, que
+tem um app bem maior): `tests.py` (modelos, view e segurança do contato) e
+`test_interface.py` (as correções da auditoria de interface, spec 004, um grupo
+por requisito; lê o CSS e o JavaScript como texto). O `test_interface.py` tem
+as próprias fixtures de isolamento (e-mail, mídia, cache) e um override no mypy.
 
 **CI no GitHub Actions** (`.github/workflows/ci.yml`): roda em todo push na
 `main` e em todo `pull_request`, com dois jobs independentes: **`qualidade`**
@@ -264,10 +324,11 @@ cobre a varredura contínua de dependências.
 A pasta `specs/` documenta cada feature em três arquivos versionados —
 `requirements.md` (o quê/porquê + critérios de aceite em **Given/When/Then**),
 `design.md` (arquitetura + ADRs) e `tasks.md` (quebra rastreável `tarefa →
-requisito`). As três specs atuais foram reconstruídas por **engenharia
+requisito`). As specs 001 a 003 foram reconstruídas por **engenharia
 reversa** do código (`status: concluído`), numa auditoria de segurança +
-modernização de infraestrutura conduzida em 2026-09. A metodologia e o
-índice completo estão em `specs/README.md`.
+modernização de infraestrutura conduzida em 2026-09; a 004 nasceu da auditoria
+de interface de 2026-10-18. A metodologia e o índice completo estão em
+`specs/README.md`.
 
 ## Gestão de Dependências (uv)
 

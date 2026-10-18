@@ -131,10 +131,12 @@ X_FRAME_OPTIONS = "DENY"  # Impede que seu site seja exibido dentro de iframes a
 
 # CSP: Define de onde o seu site pode carregar scripts, estilos e imagens
 CSP_DEFAULT_SRC = ("'self'",)
-CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com")
+# As fontes agora vêm de static/fonts/ (spec 004, RF-17): o Google Fonts saiu de
+# style-src e font-src.
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 CSP_SCRIPT_SRC = ("'self'",)
 CSP_IMG_SRC = ("'self'", "data:", "https:")
-CSP_FONT_SRC = ("'self'", "https://fonts.gstatic.com")
+CSP_FONT_SRC = ("'self'",)
 
 # LOGICA DE PRODUÇÃO: Ativa proteção rigorosa apenas se DEBUG for False
 if not DEBUG:
