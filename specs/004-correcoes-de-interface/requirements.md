@@ -53,7 +53,7 @@ Os principais:
   JavaScript puros.
 - Os pontos de infraestrutura que a auditoria só viu de passagem: o
   `STATICFILES_STORAGE` (ignorado pelo Django 6.1; o nome certo é `STORAGES`) e
-  a compressão do WhiteNoise ficam fora desta spec.
+  a compressão do WhiteNoise ficam fora desta spec (issue #38, PR #39).
 - Leitor de tela de verdade, Safari no iPhone e produção (PythonAnywhere): não
   verificados.
 
