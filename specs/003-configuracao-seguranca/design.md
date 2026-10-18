@@ -26,7 +26,7 @@ de settings.
 | Bloco 4 (segurança avançada) | `portfolio/settings.py:124-147` | HSTS, cookies seguros, SSL redirect — só com `DEBUG=False` |
 | `django-csp` | `portfolio/settings.py:130-135` | Diretivas `CSP_*` |
 | `portfolio/urls.py` | raiz | Monta `admin.site.urls` em `settings.ADMIN_URL_PATH` |
-| `whitenoise` | `MIDDLEWARE` + `STATICFILES_STORAGE` | Serve e comprime estáticos sem servidor dedicado |
+| `whitenoise` | `MIDDLEWARE` + `STORAGES["staticfiles"]` | Serve e comprime estáticos sem servidor dedicado |
 | `.env.example` | raiz | Documenta cada variável exigida, sem valores reais |
 
 ## 3. Modelo de dados
