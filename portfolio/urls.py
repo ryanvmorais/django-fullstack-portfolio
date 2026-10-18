@@ -11,6 +11,7 @@ ESTRUTURA DO CÓDIGO:
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import include, path
 from django.views.generic.base import RedirectView
 
@@ -26,9 +27,12 @@ urlpatterns = [
     path("", include("app_portfolio.urls")),
     # 3. GESTÃO DE ARQUIVOS ESTÁTICOS
     # Redireciona a busca automática do navegador para o local correto do favicon.
+    # O arquivo é o favicon.webp (a rota apontava para um favicon.png que não
+    # existe e respondia 404; spec 004, RF-20). staticfiles_storage.url() devolve
+    # o caminho absoluto (/static/...), não o relativo que STATIC_URL sozinho dava.
     path(
         "favicon.ico",
-        RedirectView.as_view(url=settings.STATIC_URL + "icons/favicon.png"),
+        RedirectView.as_view(url=staticfiles_storage.url("icons/favicon.webp")),
     ),
 ]
 

@@ -29,6 +29,18 @@ from .models import (
     Tecnologia,
 )
 
+# Frases mostradas ao visitante quando o envio não vai adiante (spec 004,
+# RF-03): o JavaScript exibe `message` das respostas JSON, e o limite de envio
+# usa a mesma frase no fluxo HTML tradicional (django.contrib.messages).
+MENSAGEM_ENVIADO = "Mensagem enviada!"
+MENSAGEM_LIMITE_ENVIO = (
+    "Você já enviou uma mensagem recentemente. Aguarde 10 minutos para enviar outra."
+)
+MENSAGEM_FALHA_ENVIO = (
+    "Não foi possível enviar agora. Tente novamente em alguns minutos."
+)
+MENSAGEM_DADOS_INVALIDOS = "Confira os campos do formulário e tente novamente."
+
 logger = logging.getLogger(__name__)
 
 
@@ -96,13 +108,10 @@ def home(request: HttpRequest) -> HttpResponse:
             if not cache.add(cache_key, True, 600):
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
                     return JsonResponse(
-                        {"status": "error", "message": "Muitas tentativas..."},
+                        {"status": "error", "message": MENSAGEM_LIMITE_ENVIO},
                         status=429,
                     )
-                messages.error(
-                    request,
-                    "Você já enviou uma mensagem recentemente. Por favor, aguarde 10 minutos.",
-                )
+                messages.error(request, MENSAGEM_LIMITE_ENVIO)
                 return redirect("home")
 
             # C. SEGURANÇA: SANITIZAÇÃO (Bleach)
@@ -138,23 +147,27 @@ def home(request: HttpRequest) -> HttpResponse:
                 # Suporte para respostas assíncronas (AJAX)
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
                     return JsonResponse(
-                        {"status": "success", "message": "Mensagem enviada!"}
+                        {"status": "success", "message": MENSAGEM_ENVIADO}
                     )
+                messages.success(request, MENSAGEM_ENVIADO)
                 return redirect("home")
 
             except Exception:
                 logger.exception("Falha ao enviar e-mail de contato")
                 if request.headers.get("x-requested-with") == "XMLHttpRequest":
                     return JsonResponse(
-                        {"status": "error", "message": "Erro ao enviar e-mail."},
+                        {"status": "error", "message": MENSAGEM_FALHA_ENVIO},
                         status=500,
                     )
+                messages.error(request, MENSAGEM_FALHA_ENVIO)
 
         else:
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse(
-                    {"status": "error", "message": "Dados inválidos."}, status=400
+                    {"status": "error", "message": MENSAGEM_DADOS_INVALIDOS},
+                    status=400,
                 )
+            messages.error(request, MENSAGEM_DADOS_INVALIDOS)
 
     # --- 3. CONTEXTO PARA O TEMPLATE ---
     # Dicionário que mapeia variáveis do Python para as tags {{ }} no HTML.

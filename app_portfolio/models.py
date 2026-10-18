@@ -155,6 +155,12 @@ class Perfil(models.Model):
     curriculo = models.FileField(upload_to="curriculo/", null=True, blank=True)
     link_linkedin = models.URLField(blank=True, null=True)
     link_github = models.URLField(blank=True, null=True)
+    # Redes do rodapé (spec 004, ADR-4): só aparecem quando preenchidas, em vez
+    # de apontar para a página inicial de cada site.
+    link_instagram = models.URLField(blank=True, null=True)
+    link_facebook = models.URLField(blank=True, null=True)
+    link_x = models.URLField(blank=True, null=True)
+    link_tiktok = models.URLField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Perfil"

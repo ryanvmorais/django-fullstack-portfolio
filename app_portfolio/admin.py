@@ -84,6 +84,18 @@ class PerfilAdmin(admin.ModelAdmin):
                 )
             },
         ),
+        (
+            "Redes Sociais do Rodapé (opcionais)",
+            {
+                "description": "Só aparecem no rodapé as redes preenchidas.",
+                "fields": (
+                    "link_instagram",
+                    "link_facebook",
+                    "link_x",
+                    "link_tiktok",
+                ),
+            },
+        ),
     )
 
 

@@ -60,7 +60,8 @@
                 </div>
             </div>
             <div class="hero__scroll">
-                <a href="#about" class="scroll-indicator" aria-label="Rolar para seção Sobre">
+                {# aria-label começa pelo texto visível "Explorar" (spec 004, RF-11) #}
+                <a href="#about" class="scroll-indicator" aria-label="Explorar: rolar para a seção Sobre">
                     <span class="scroll-text">Explorar</span>
                     <span class="scroll-line"></span>
                 </a>
@@ -76,9 +77,9 @@
                 <div class="about__container">
                     <div class="about__image-wrapper">
                         <div class="about__image-container">
-                            {# Fallback para imagem estática se o perfil não tiver foto no banco #}
-                            <img 
-                            src="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}{% static 'icons/avatar_padrao.webp' %}{% endif %}" 
+                            {# Fallback para imagem estática se o perfil não tiver foto no banco (o arquivo se chama default_perfil.webp: spec 004, RF-09) #}
+                            <img
+                            src="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}{% static 'icons/default_perfil.webp' %}{% endif %}"
                             alt="Foto de {{ perfil.nome|default:'Desenvolvedor' }}" 
                             class="about__image" 
                             loading="lazy"
@@ -116,10 +117,13 @@
                             </div>
                         </div>
         
+                        {# O currículo é opcional no admin; sem este if, .curriculo.url levanta ValueError e a home inteira dá erro 500 (spec 004, RF-01) #}
+                        {% if perfil.curriculo %}
                         <a href="{{ perfil.curriculo.url }}" class="btn btn--primary" download>
                             <img src="{% static 'icons/download.svg' %}" alt="" aria-hidden="true" width="20" height="20">
                             Download CV
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -131,23 +135,26 @@
                 <span class="section__subtitle">Meu Trabalho</span>
                 <h2 class="section__title">Projetos em Destaque</h2>
                 
-                {# FILTROS: Criados dinamicamente com base nas categorias do banco #}
+                {# FILTROS: Criados dinamicamente com base nas categorias do banco. aria-pressed e a classe .active são alternados por filtrarProjetos() em main.js (spec 004, RF-13) #}
                 <div class="projects__filters" role="group" aria-label="Filtros de projeto">
-                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn active" data-filter="all" aria-pressed="true">Todos</button>
                     {% for categoria in categorias_projetos %}
-                        <button class="filter-btn" data-filter="{{ categoria.slug }}">
+                        <button class="filter-btn" data-filter="{{ categoria.slug }}" aria-pressed="false">
                             {{ categoria.nome }}
                         </button>
                     {% endfor %}
                 </div>
+                {# Região viva: main.js escreve aqui quantos projetos o filtro mostra #}
+                <p class="sr-only" id="projects-status" role="status"></p>
                 
                 <div class="projects__grid">
                     {% for projeto in projetos %}
                     <article class="project-card" data-category="{{ projeto.categoria_projeto.slug }}">
                         <div class="project-card__image">
                             {# Fallback para imagem estática se o projeto não tiver imagem no banco #}
-                            <img src="{% if projeto.imagem %}{{ projeto.imagem.url }}{% else %}{% static 'icons/default_projeto.webp' %}{% endif %}" 
-                            alt="Thumbnail do projeto {{ projeto.titulo|default:'Em breve' }}"
+                            {# alt vazio: a capa é decorativa e o título logo abaixo já nomeia o projeto (spec 004, RF-21) #}
+                            <img src="{% if projeto.imagem %}{{ projeto.imagem.url }}{% else %}{% static 'icons/default_projeto.webp' %}{% endif %}"
+                            alt=""
                             class="project-card__img"
                             loading="lazy">
                         </div>
@@ -163,10 +170,13 @@
                                 {% endfor %}
                             </div>
 
+                            {# O link é opcional (blank=True): sem este if saía href="None", que abre /None. O sr-only dá a cada link um nome próprio (spec 004, RF-10) #}
+                            {% if projeto.link_github %}
                             <a href="{{ projeto.link_github }}" class="btn-github" target="_blank" rel="noopener noreferrer">
                                 <img src="{% static 'icons/github.svg' %}" alt="" aria-hidden="true" width="18" height="18">
-                                Ver no GitHub
+                                <span>Ver no GitHub<span class="sr-only"> do projeto {{ projeto.titulo }}</span></span>
                             </a>
+                            {% endif %}
                         </div>
                     </article>
                     {% endfor %}
@@ -207,7 +217,8 @@
 
                                 {# 2. Toggle para a barra visual #}
                                 {% if perfil.mostrar_progresso %}
-                                    <div class="skill-item__bar" role="progressbar" aria-valuenow="{{ habilidade.progresso }}" aria-valuemin="0" aria-valuemax="100">
+                                    {# aria-label dá nome à barra; sem ele o leitor de tela diz só "barra de progresso, 90" (spec 004, RF-07) #}
+                                    <div class="skill-item__bar" role="progressbar" aria-label="{{ habilidade.nome }}" aria-valuenow="{{ habilidade.progresso }}" aria-valuemin="0" aria-valuemax="100">
                                         <div class="skill-item__progress" style="width: {{ habilidade.progresso }}%"></div>
                                     </div>
                                 {% endif %}
@@ -258,25 +269,30 @@
                                 </div>
                             </div>
                             
+                            {# O texto do link sai do próprio endereço do perfil (sem https:// nem www.), em vez de um usuário fixo (spec 004, RF-14) #}
+                            {% if perfil.link_linkedin %}
                             <div class="contact__card">
                                 <div class="contact__card-icon">
                                     <img src="{% static 'icons/social/linkedin.svg' %}" alt="" aria-hidden="true" width="24" height="24">
                                 </div>
                                 <div class="contact__card-content">
                                     <span class="contact__card-title">LinkedIn</span>
-                                    <a href="{{ perfil.link_linkedin }}" class="contact__card-link" target="_blank">/in/seu_usuario</a>
+                                    <a href="{{ perfil.link_linkedin }}" class="contact__card-link" target="_blank" rel="noopener">{{ perfil.link_linkedin|cut:"https://"|cut:"http://"|cut:"www." }}</a>
                                 </div>
                             </div>
-                            
+                            {% endif %}
+
+                            {% if perfil.link_github %}
                             <div class="contact__card">
                                 <div class="contact__card-icon">
                                     <img src="{% static 'icons/social/github.svg' %}" alt="" aria-hidden="true" width="24" height="24">
                                 </div>
                                 <div class="contact__card-content">
                                     <span class="contact__card-title">GitHub</span>
-                                    <a href="{{ perfil.link_github }}" class="contact__card-link" target="_blank">/seu_usuario</a>
+                                    <a href="{{ perfil.link_github }}" class="contact__card-link" target="_blank" rel="noopener">{{ perfil.link_github|cut:"https://"|cut:"http://"|cut:"www." }}</a>
                                 </div>
                             </div>
+                            {% endif %}
 
                             <div class="contact__card">
                                 <div class="contact__card-icon">
@@ -300,12 +316,12 @@
 
                         <div class="form__group">
                             <label for="name" class="form__label">Nome</label>
-                            <input type="text" id="name" name="nome" class="form__input" placeholder="Seu nome completo" required>
+                            <input type="text" id="name" name="nome" class="form__input" placeholder="Seu nome completo" required autocomplete="name">
                         </div>
                         
                         <div class="form__group">
                             <label for="email" class="form__label">Email</label>
-                            <input type="email" id="email" name="email" class="form__input" placeholder="seu@email.com" required>
+                            <input type="email" id="email" name="email" class="form__input" placeholder="seu@email.com" required autocomplete="email">
                         </div>
                         
                         <div class="form__group">
