@@ -128,8 +128,8 @@ docs/
 ### Modelos (em `models.py`)
 
 1. **Auxiliares** — `Tecnologia` (badge + ícone, `mostrar_no_home` filtra a
-   seção de ícones), `CategoriaProjeto` (agrupamento por `slug`,
-   `CategoriaHabilidade`.
+   seção de ícones), `CategoriaProjeto` (agrupamento por `slug`)
+   e `CategoriaHabilidade`.
 2. **Identidade** — `Perfil` (sem constraint de singleton — convenção de uso,
    não regra de negócio; um segundo registro faria `Perfil.objects.first()`
    retornar algo arbitrário). `foto`, `curriculo`, `link_linkedin` e
@@ -306,27 +306,24 @@ uv run mypy app_portfolio portfolio        # 3. checa tipos (NÃO altera, só re
 uv run pytest                              # 4. roda os testes
 ```
 
-Os testes ficam em dois arquivos ao lado do código, não numa pasta `tests/` — o
-projeto tem uma única view e um punhado de models, não há volume que
-justifique a divisão por módulo testado (diferente do `site-ryan-morais`, que
-tem um app bem maior): `tests.py` (modelos, view e segurança do contato) e
-`test_interface.py` (as correções da auditoria de interface, spec 004, um grupo
-por requisito; lê o CSS e o JavaScript como texto). O `test_interface.py` tem
-as próprias fixtures de isolamento (e-mail, mídia, cache) e um override no mypy.
+Os testes ficam em dois arquivos ao lado do código, não numa pasta `tests/` — uma
+única view e um punhado de models não justificam a divisão por módulo (diferente
+do `site-ryan-morais`): `tests.py` (modelos, view e segurança do contato) e
+`test_interface.py` (as correções da spec 004, um grupo por requisito; lê o CSS e
+o JavaScript como texto, com fixtures de isolamento próprias e um override no mypy).
 
 **CI no GitHub Actions** (`.github/workflows/ci.yml`): roda em todo push na
 `main` e em todo `pull_request`, com dois jobs independentes: **`qualidade`**
 (`ruff check` → `black --check` → `mypy app_portfolio portfolio` → `pytest`)
 e **`seguranca`** (`pip-audit` + `manage.py check --deploy`, `DEBUG=False`).
-Sem CodeQL — em repo privado exige GitHub Advanced Security (pago); o
-Dependabot (`.github/dependabot.yml`, ecossistemas `uv` + `github-actions`)
+Sem CodeQL ainda (o repo é público, então o code scanning é grátis; falta
+só o workflow). O Dependabot (`.github/dependabot.yml`, `uv` + `github-actions`)
 cobre a varredura contínua de dependências.
 
 **pip-audit semanal** (`.github/workflows/pip-audit.yml`): toda segunda, 09:00 de
-São Paulo (e à mão, por `workflow_dispatch`), exporta o `uv.lock` e roda o
-`pip-audit` sobre ele, porque o CI só roda em push/PR e o Dependabot nem sempre
-abre PR de correção. Run vermelho = CVE no lock; a resposta é a
-`/atualizar-dependencias`.
+São Paulo (e à mão), roda o `pip-audit` sobre o `uv.lock`, porque o CI só roda em
+push/PR e o Dependabot nem sempre abre PR. Run vermelho = CVE no lock; a resposta
+é a `/atualizar-dependencias`.
 
 ## Spec-Driven Development (em `specs/`)
 
