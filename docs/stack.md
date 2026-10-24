@@ -243,7 +243,9 @@ home).
 
 Varre o grafo de dependências resolvido em busca de CVEs conhecidas
 (banco de dados PyPA). Roda tanto manualmente (auditoria de segurança) quanto
-no job `seguranca` do CI.
+no job `seguranca` do CI e, toda segunda-feira, num workflow próprio
+(`pip-audit.yml`) que exporta o `uv.lock` e o audita (o CI só roda em PR, e o
+Dependabot nem sempre abre PR de correção).
 
 **Por que este:** é a ferramenta oficial do Python Packaging Authority para
 esse fim — sem depender de um serviço SaaS de terceiros.
