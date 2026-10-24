@@ -114,6 +114,7 @@ uv.lock                # Lock único gerado por `uv lock` — todo o grafo pinad
 .env.example           # Template documentado de variáveis de ambiente (commitado no repo)
 .github/                # Serviços do GitHub (commitado)
   workflows/ci.yml       # CI: job "qualidade" (ruff/black/mypy/pytest) + job "seguranca" (pip-audit + check --deploy); em push na main e em PR
+  workflows/pip-audit.yml # pip-audit semanal sobre o uv.lock (segunda 09:00 de São Paulo e à mão)
   dependabot.yml         # PRs de atualização de dependências aos domingos, agrupados por ecossistema (uv + github-actions)
   ISSUE_TEMPLATE/        # Formulário de dúvida, erro ou sugestão (+ config.yml sem issue em branco)
   pull_request_template.md  # Corpo padrão do PR: o quê/por quê e "Closes #N"
@@ -320,6 +321,12 @@ e **`seguranca`** (`pip-audit` + `manage.py check --deploy`, `DEBUG=False`).
 Sem CodeQL — em repo privado exige GitHub Advanced Security (pago); o
 Dependabot (`.github/dependabot.yml`, ecossistemas `uv` + `github-actions`)
 cobre a varredura contínua de dependências.
+
+**pip-audit semanal** (`.github/workflows/pip-audit.yml`): toda segunda, 09:00 de
+São Paulo (e à mão, por `workflow_dispatch`), exporta o `uv.lock` e roda o
+`pip-audit` sobre ele, porque o CI só roda em push/PR e o Dependabot nem sempre
+abre PR de correção. Run vermelho = CVE no lock; a resposta é a
+`/atualizar-dependencias`.
 
 ## Spec-Driven Development (em `specs/`)
 
