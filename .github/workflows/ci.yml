@@ -8,8 +8,9 @@
 # Python so ate o 3.13); o 3.14 e a versao estavel mais nova. A matriz testa as
 # duas pontas, para o piso declarado no pyproject.toml nao ser so uma promessa.
 #
-# CodeQL/code scanning fica de fora: exige GitHub Advanced Security em repo
-# privado. Dependabot (alerts + version updates) cobre a varredura continua.
+# CodeQL (code scanning) roda no workflow proprio codeql.yml, porque o repo e
+# publico e o code scanning e gratis. Dependabot (alerts + version updates) cobre
+# a varredura continua de dependencias.
 name: CI
 
 on:

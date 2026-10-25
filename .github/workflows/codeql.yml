@@ -1,0 +1,49 @@
+# CodeQL (code scanning) como workflow do repositorio, nao como o "default setup" do GitHub:
+# o default roda num rotulo de runner que o repositorio nao controla e seus runs nao podem
+# ser re-executados. Aqui o runner e fixo e um job travado pode ser re-executado.
+# So Python, sem build (`build-mode: none`): o CodeQL le o codigo-fonte.
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Semanal, domingo as 12:00 UTC (09:00 em Sao Paulo, junto do Dependabot): consultas novas
+  # chegam ao pacote do CodeQL sem mudanca no repositorio.
+  schedule:
+    - cron: "0 12 * * 0"
+
+permissions:
+  contents: read
+
+# Um push novo no mesmo PR deixa a analise anterior sem sentido; na main e no agendamento
+# todo run e mantido, para nenhum resultado se perder.
+concurrency:
+  group: codeql-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  analyze:
+    name: Analyze (python)
+    runs-on: ubuntu-26.04
+    # Um run leva poucos minutos; o teto evita que um job travado gaste a cota.
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      # Envia o resultado (SARIF) para a aba Security.
+      security-events: write
+    steps:
+      - name: Checkout do repositorio
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Inicializa o CodeQL
+        uses: github/codeql-action/init@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        with:
+          languages: python
+          build-mode: none
+
+      - name: Analisa
+        uses: github/codeql-action/analyze@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        with:
+          category: "/language:python"
