@@ -121,6 +121,7 @@ LICENSE                # MIT
 .github/                # Serviços do GitHub (commitado)
   workflows/ci.yml       # CI: job "qualidade" (ruff/black/mypy/pytest) + job "seguranca" (pip-audit + check --deploy); em push na main e em PR
   workflows/pip-audit.yml # pip-audit semanal sobre o uv.lock (segunda 09:00 de São Paulo e à mão)
+  workflows/lighthouse.yml # Lighthouse CI (config e resumo em .github/lighthouse/)
   dependabot.yml         # PRs de atualização de dependências aos domingos, agrupados por ecossistema (uv + github-actions)
   ISSUE_TEMPLATE/        # Formulário de dúvida, erro ou sugestão (+ config.yml sem issue em branco)
   pull_request_template.md  # Corpo padrão do PR: o quê/por quê e "Closes #N"
@@ -336,6 +337,12 @@ cobre a varredura contínua de dependências.
 São Paulo (e à mão), roda o `pip-audit` sobre o `uv.lock`, porque o CI só roda em
 push/PR e o Dependabot nem sempre abre PR. Run vermelho = CVE no lock; a resposta
 é a `/atualizar-dependencias`.
+
+**Lighthouse CI** (`.github/workflows/lighthouse.yml`): audita a Home em mobile e
+desktop, em PR que mude a página, no push da `main` e à mão; **não é check
+obrigatório**. Sobe com `manage.py semear_dados_demo` (só `DEBUG=True`). Limites
+em `.github/lighthouse/*.json`; `@lhci/cli` fixado em `LHCI_VERSION`. Detalhes em
+`docs/stack.md`; teste em `app_portfolio/test_semear_dados_demo.py`.
 
 ## Spec-Driven Development (em `specs/`)
 

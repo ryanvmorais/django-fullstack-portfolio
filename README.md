@@ -107,8 +107,10 @@ uv run pytest --cov=app_portfolio     # testes + cobertura
 O mesmo portão roda automaticamente em CI (`.github/workflows/ci.yml`) a cada
 push/PR, junto com uma checagem de segurança (`pip-audit` + `manage.py check
 --deploy`). O `pip-audit` roda também toda segunda-feira
-(`.github/workflows/pip-audit.yml`). Para o mapa de cada tecnologia da stack (o que é, por que foi
-escolhida, o que estudar), veja [`docs/stack.md`](docs/stack.md); para as
+(`.github/workflows/pip-audit.yml`), e o Lighthouse CI
+(`.github/workflows/lighthouse.yml`) audita a Home em mobile e desktop. Para o
+mapa de cada tecnologia da stack (o que é, por que foi escolhida, o que
+estudar), veja [`docs/stack.md`](docs/stack.md); para as
 especificações de cada funcionalidade, veja [`specs/`](specs/); para o
 detalhamento exaustivo de arquitetura e convenções, veja
 [`CLAUDE.md`](CLAUDE.md).
