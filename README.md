@@ -87,7 +87,7 @@ Para garantir a melhor experiência de aprendizado e a execução correta de tod
     ```bash
     uv run python manage.py runserver
     ```
-7.  **Cadastre o conteúdo no Admin:** perfil, projetos, habilidades e estatísticas são cadastrados em `/admin/` (ou no caminho definido em `ADMIN_URL` no `.env`) com o superusuário criado acima. Sem isso, a home abre vazia.
+7.  **Cadastre o conteúdo no Admin:** perfil, projetos, habilidades e estatísticas são cadastrados em `/admin/` (ou no caminho definido em `ADMIN_URL` no `.env`) com o superusuário criado acima. Sem isso, a home abre vazia. Prefere só ver a home preenchida? Com `DEBUG=True` no `.env`, `uv run python manage.py semear_dados_demo` cria perfil, projetos, habilidades e estatísticas fictícios (sem duplicar se rodar de novo).
 > ⚠️ **Nota sobre o Formulário de Contato:** Para que o envio de e-mails funcione, você precisará de uma **"Senha de App"** do Google (caso use Gmail). Não utilize sua senha comum de login; o Google bloqueia essa conexão por segurança. Configure isso em *Segurança > Verificação em duas etapas > Senhas de App*.
 
 ---
