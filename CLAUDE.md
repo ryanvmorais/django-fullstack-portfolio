@@ -121,6 +121,7 @@ LICENSE                # MIT
 .github/                # Serviços do GitHub (commitado)
   workflows/ci.yml       # CI: job "qualidade" (ruff/black/mypy/pytest) + job "seguranca" (pip-audit + check --deploy); em push na main e em PR
   workflows/pip-audit.yml # pip-audit semanal sobre o uv.lock (segunda 09:00 de São Paulo e à mão)
+  workflows/codeql.yml   # CodeQL (code scanning) de Python: PR, main e semanal
   dependabot.yml         # PRs de atualização de dependências aos domingos, agrupados por ecossistema (uv + github-actions)
   ISSUE_TEMPLATE/        # Formulário de dúvida, erro ou sugestão (+ config.yml sem issue em branco)
   pull_request_template.md  # Corpo padrão do PR: o quê/por quê e "Closes #N"
@@ -328,8 +329,9 @@ o JavaScript como texto, com fixtures de isolamento próprias e um override no m
 `main` e em todo `pull_request`, com dois jobs independentes: **`qualidade`**
 (`ruff check` → `black --check` → `mypy app_portfolio portfolio` → `pytest`)
 e **`seguranca`** (`pip-audit` + `manage.py check --deploy`, `DEBUG=False`).
-Sem CodeQL ainda (o repo é público, então o code scanning é grátis; falta
-só o workflow). O Dependabot (`.github/dependabot.yml`, `uv` + `github-actions`)
+O CodeQL (code scanning, grátis em repo público) roda no workflow próprio
+`codeql.yml`, em PR, na `main` e uma vez por semana; não é check obrigatório. O
+Dependabot (`.github/dependabot.yml`, `uv` + `github-actions`)
 cobre a varredura contínua de dependências.
 
 **pip-audit semanal** (`.github/workflows/pip-audit.yml`): toda segunda, 09:00 de
