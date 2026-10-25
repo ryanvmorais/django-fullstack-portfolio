@@ -26,7 +26,7 @@ Este projeto foi estruturado para consolidar pilares fundamentais de engenharia 
 
 * **Segurança Ofensiva e Defensiva:** Implementação de *Honeypot* (armadilha para bots), *Rate Limit* (limitação de envios por IP) e integração com `bleach` para sanitização de HTML.
 * **Performance & Escala:** Uso de `select_related` e `prefetch_related` para mitigar o problema de consultas N+1, garantindo carregamento instantâneo.
-* **DevOps Mindset:** Estrutura de dependências dividida entre `local`, `base` e `production`, além de configurações rigorosas de CSP (Content Security Policy) e HSTS.
+* **DevOps Mindset:** Dependências travadas num `uv.lock` (runtime, grupo `dev` e extra `prod`) com quarentena de 7 dias contra versões recém-publicadas, `pip-audit` no CI e toda segunda-feira, Dependabot, além de configurações rigorosas de CSP (Content Security Policy) e HSTS.
 * **Interface Auditada:** a home foi conferida em Chrome real (10 tamanhos de celular, axe-core, teclado, formulário) e corrigida com um teste por requisito: hero que cabe na primeira tela do celular, formulário que avisa o visitante em qualquer resposta do servidor, menu acessível, contraste, "reduzir movimento", fontes hospedadas no projeto e páginas de erro próprias (spec 004).
 * **Qualidade de Código:** Suíte de testes automatizados com `pytest` cobrindo fluxos de sucesso e tentativas de ataque.
 
@@ -41,7 +41,7 @@ Para quem está começando, o maior desafio não é decorar comandos do Django, 
 5. **Sanitização de Conteúdo:** Nunca confiamos no que o usuário digita. Utilizamos a biblioteca `bleach` para "limpar" as mensagens recebidas, garantindo que qualquer tentativa de injetar scripts maliciosos (ataques XSS) seja neutralizada antes mesmo de chegar ao banco de dados.
 6. **Blindagem do Navegador (CSP):** Configuramos o *Content Security Policy*. Isso é como um segurança na porta do site que diz ao navegador: "Só aceite estilos e scripts que venham deste próprio servidor". Isso impede que invasores injetem códigos externos no seu front-end.
 7. **Dinamismo das Habilidades:** O sistema permite total controle sobre a exibição da barra de progresso das habilidades. Através do Painel Administrativo, você define o percentual (0 a 100) de habilidade em cada tecnologia. Caso não queira exibir a barra de progresso, basta desmarcar a seção `Exibir barras de progresso` no seu Perfil do Painel Administrativo (*Admin*) e clicar em salvar.
-8. **URLs Amigáveis (Slugs):** Implementamos a geração automática de *Slugs*. Isso significa que o Django transforma títulos de projetos em links legíveis para humanos e motores de busca (SEO), evitando IDs numéricos confusos nas URLs.
+8. **Slugs nas Categorias:** Cada `CategoriaProjeto` tem um *Slug* único (ex.: `web`, `api`), um identificador curto e legível. O filtro da seção de projetos usa esse valor para mostrar e esconder os cards sem recarregar a página.
 9. **Ambiente de Produção Real:** O projeto não roda apenas no seu computador. Ele foi estruturado com variáveis de ambiente (`.env`) e configurações específicas para servidores (como o `WhiteNoise` para arquivos estáticos), garantindo que o deploy em plataformas como o **PythonAnywhere** seja suave e seguro.
 
 ---
@@ -75,11 +75,19 @@ Para garantir a melhor experiência de aprendizado e a execução correta de tod
     ```bash
     uv sync
     ```
-4.  **Execute as migrações e o servidor:**
+4.  **Crie as tabelas do banco:**
     ```bash
     uv run python manage.py migrate
+    ```
+5.  **Crie o superusuário do Admin:**
+    ```bash
+    uv run python manage.py createsuperuser
+    ```
+6.  **Suba o servidor:**
+    ```bash
     uv run python manage.py runserver
     ```
+7.  **Cadastre o conteúdo no Admin:** perfil, projetos, habilidades e estatísticas são cadastrados em `/admin/` (ou no caminho definido em `ADMIN_URL` no `.env`) com o superusuário criado acima. Sem isso, a home abre vazia.
 > ⚠️ **Nota sobre o Formulário de Contato:** Para que o envio de e-mails funcione, você precisará de uma **"Senha de App"** do Google (caso use Gmail). Não utilize sua senha comum de login; o Google bloqueia essa conexão por segurança. Configure isso em *Segurança > Verificação em duas etapas > Senhas de App*.
 
 ---

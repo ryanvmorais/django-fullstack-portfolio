@@ -110,8 +110,14 @@ static/
   icons/                # SVGs de UI, tecnologias e redes sociais; default_perfil/default_projeto.webp (reserva) e favicon.webp
 pyproject.toml         # Gerenciado com uv. [project]=runtime, [dependency-groups].dev, [project.optional-dependencies].prod + config das ferramentas (ruff, black, mypy, pytest)
 uv.lock                # Lock único gerado por `uv lock` — todo o grafo pinado (NUNCA editar à mão)
+.python-version        # Fixa o Python 3.12 (o piso) no desenvolvimento
 .venv/                 # Ambiente virtual gerenciado pelo uv (gitignored; criado por `uv sync`)
 .env.example           # Template documentado de variáveis de ambiente (commitado no repo)
+django_cache/          # Cache em arquivo do rate limit (gitignored)
+media/                 # Uploads do Admin (gitignored)
+assets/                # Banner do README
+CONTRIBUTING.md        # Guia de contribuição
+LICENSE                # MIT
 .github/                # Serviços do GitHub (commitado)
   workflows/ci.yml       # CI: job "qualidade" (ruff/black/mypy/pytest) + job "seguranca" (pip-audit + check --deploy); em push na main e em PR
   workflows/pip-audit.yml # pip-audit semanal sobre o uv.lock (segunda 09:00 de São Paulo e à mão)
@@ -123,6 +129,7 @@ specs/                  # Especificações (spec-driven development); ver specs/
   NNN-feature/            # requirements.md + design.md + tasks.md por feature
 docs/
   stack.md                # Mapa de cada tecnologia da stack: o que faz, por que foi escolhida, o que estudar
+  referencia/             # Detalhes que não cabem aqui (quarentena do uv, cache do rate limit)
 ```
 
 ### Modelos (em `models.py`)
@@ -173,8 +180,9 @@ sequência:
 
 1. **Honeypot** — campo oculto `honeypot`; preenchido → redirect silencioso,
    nada é salvo.
-2. **Rate limit** — cache (`LocMemCache`) por `contact_limit_{REMOTE_ADDR}`,
-   janela de 600s, ativado **só depois** do envio de e-mail suceder.
+2. **Rate limit** — cache em arquivo (`FileBasedCache`, pasta `django_cache/`,
+   compartilhado entre workers) por `contact_limit_{REMOTE_ADDR}`, janela de
+   600s, ativado **só depois** do envio de e-mail suceder.
 3. **Validação** — `MensagemContatoForm` (ModelForm).
 4. **Sanitização** — `bleach.clean(mensagem, tags=[], strip=True)` antes de
    salvar (só o campo `mensagem`; `nome`/`assunto` não passam por `bleach`).
@@ -274,6 +282,10 @@ em `STORAGES["staticfiles"]`. Não use `STATICFILES_STORAGE`: o Django 6.1 ignor
 esse nome e os estáticos saem sem compressão (issue #38). `collectstatic` é
 obrigatório antes do deploy.
 
+> ⚠️ **Não regredir (cache):** o rate limit usa `FileBasedCache` em `django_cache/`, nunca
+> `LocMemCache` (por processo: com vários workers o limite por IP se multiplica). Ver
+> `docs/referencia/dependencias-e-cache.md`.
+
 **Banco de dados:** SQLite em desenvolvimento; PostgreSQL em produção via
 `psycopg2-binary` (extra `prod`), configurado manualmente em `DATABASES` (sem
 `dj-database-url` — troca direta na config quando o deploy usa Postgres).
@@ -359,3 +371,6 @@ aparecem lá.
 **`uv.lock`** trava o grafo **completo** em versões exatas. Gerado/atualizado
 por `uv lock` (ou automaticamente por `uv add`/`uv remove`) e **nunca editado
 à mão**. Commite sempre o `pyproject.toml` **e** o `uv.lock`.
+
+**Quarentena de 7 dias:** `[tool.uv] exclude-newer = "7 days"` (lock só com versões de 7+ dias).
+Exceções e prazos: `docs/referencia/dependencias-e-cache.md`.

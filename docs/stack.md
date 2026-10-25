@@ -55,7 +55,9 @@ magnitude mais rápido para instalar.
 **Estudar:** `uv sync` / `uv sync --extra prod`, `uv run <comando>`, `uv add`
 / `uv lock`, a diferença entre `[project.dependencies]` (runtime),
 `[project.optional-dependencies]` (extras, aqui só `prod`) e
-`[dependency-groups]` (ferramentas de dev).
+`[dependency-groups]` (ferramentas de dev), e a quarentena
+`[tool.uv] exclude-newer = "7 days"`, que faz o lock resolver só versões
+publicadas há 7 dias ou mais (defesa contra pacote malicioso recém-publicado).
 
 **Docs:** [docs.astral.sh/uv](https://docs.astral.sh/uv/)
 
@@ -142,7 +144,7 @@ manualmente em um middleware próprio duplicaria uma solução já testada.
 
 **Estudar:** as diretivas `default-src`/`script-src`/`style-src`/`font-src`, por
 que `'unsafe-inline'` enfraquece a defesa contra XSS (corrigido em `script-src`
-na auditoria de segurança desta sessão — ver `specs/003-configuracao-seguranca/`).
+na auditoria de segurança de 2026-09 — ver `specs/003-configuracao-seguranca/`).
 Desde a spec 004 as fontes vêm do próprio site, então `style-src` e `font-src`
 não citam mais o Google.
 
@@ -281,9 +283,8 @@ o IPython se disponível).
 - **PostgreSQL em desenvolvimento** — SQLite é suficiente para um projeto de
   um único usuário/administrador; PostgreSQL só entra via `psycopg2-binary`
   no deploy de produção.
-- **Redis / cache distribuído** — o rate limit do formulário de contato usa
-  `LocMemCache` (em memória, por processo); o deploy atual é um único
-  processo, então não há estado a sincronizar entre workers.
+- **Redis / cache distribuído** — o rate limit usa `FileBasedCache`, compartilhado entre
+  workers sem infraestrutura extra; o `LocMemCache` foi descartado por ser por processo.
 - **django-two-factor-auth / django-axes (2FA e brute-force no Admin)** —
   usados no `site-ryan-morais` (projeto irmão, maior), mas decisão explícita
   de escala não trazer aqui: um único administrador, risco aceito (ver
