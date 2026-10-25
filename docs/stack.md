@@ -254,6 +254,22 @@ esse fim — sem depender de um serviço SaaS de terceiros.
 
 **Docs:** [pypi.org/project/pip-audit](https://pypi.org/project/pip-audit/)
 
+### Lighthouse CI
+
+Mede a Home no Chrome (mobile e desktop, 3 medições, mediana) e falha o
+workflow `lighthouse.yml` se acessibilidade, boas práticas, SEO, contraste, alvo
+de toque, erro de console, CLS ou peso regredirem. Sobe o site com os dados de
+`manage.py semear_dados_demo` (um banco vazio daria uma Home sem projetos). Não é
+check obrigatório: o Lighthouse varia em runner compartilhado.
+
+**Por que este:** é o mesmo motor do PageSpeed Insights, mas rodando a cada PR,
+então uma regressão aparece antes do merge e não depois do deploy.
+
+**Estudar:** os limites em `.github/lighthouse/*.json` (`assertions`), a diferença
+entre uma nota geral e uma asserção própria (`color-contrast`, `unsized-images`).
+
+**Docs:** [github.com/GoogleChrome/lighthouse-ci](https://github.com/GoogleChrome/lighthouse-ci)
+
 ### ipython
 
 Console Python interativo mais rico que o `python` padrão (autocomplete,
