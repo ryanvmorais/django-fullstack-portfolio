@@ -38,6 +38,9 @@ uv run python manage.py migrate
 # Criar superusuário para o Admin
 uv run python manage.py createsuperuser
 
+# Dados de demonstração (só com DEBUG=True)
+uv run python manage.py semear_dados_demo
+
 # Coletar arquivos estáticos (pré-deploy)
 uv run python manage.py collectstatic --noinput
 
@@ -94,6 +97,8 @@ app_portfolio/        # A única aplicação
   urls.py              # URLs da aplicação (só a home)
   tests.py             # Suíte de testes (pytest): modelos, view e segurança do contato, ver "Qualidade" abaixo
   test_interface.py    # Testes das correções da auditoria de interface (spec 004): HTML, view, páginas de erro, CSS e JS lidos como texto
+  test_semear_dados_demo.py # Testes do comando de demonstração e do Lighthouse CI
+  management/commands/semear_dados_demo.py # Dados fictícios (Lighthouse CI e dev)
   migrations/
 templates/            # Templates HTML na raiz do projeto (não dentro de app_portfolio)
   base.html
@@ -131,7 +136,7 @@ specs/                  # Especificações (spec-driven development); ver specs/
   NNN-feature/            # requirements.md + design.md + tasks.md por feature
 docs/
   stack.md                # Mapa de cada tecnologia da stack: o que faz, por que foi escolhida, o que estudar
-  referencia/             # Detalhes que não cabem aqui (quarentena do uv, cache do rate limit)
+  referencia/             # Detalhes que não cabem aqui (quarentena do uv, cache, regras de interface)
 ```
 
 ### Modelos (em `models.py`)
