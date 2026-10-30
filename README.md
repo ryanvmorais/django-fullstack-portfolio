@@ -1,6 +1,8 @@
-![Portfólio Dinâmico com Django: template educativo para portfólios](assets/portfolio-fullstack-django.png)
+![Portfólio Dinâmico com Django: página inicial em tema escuro, com nome, estatísticas e um bloco de código](assets/portfolio-django-home-desktop.png)
 
 # 🌊 Portfólio Dinâmico com Django | Template Educativo para Portfólios
+
+**Português (Brasil)** · [English](README.en.md)
 
 ![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-6.1-092E20?logo=django&logoColor=white)
@@ -13,7 +15,7 @@
 
 🔗 **[Ver demo ao vivo](https://djangofullstackportfolio.pythonanywhere.com/)**
 
-Este repositório contém um **Portfólio Profissional em Django**, criado como template educativo. Embora se apresente visualmente como uma *SPA* (Single Page Application), o projeto foi construído como um sistema robusto, focando em **segurança avançada**, **otimização de banco de dados** e **arquitetura limpa**.
+Este repositório contém um **Portfólio Dinâmico com Django**, um portfólio profissional criado como template educativo. Embora se apresente visualmente como uma *SPA* (Single Page Application), o projeto foi construído como um sistema robusto, focando em **segurança avançada**, **otimização de banco de dados** e **arquitetura limpa**.
 
 ### 🎯 Objetivo do Projeto:
 
@@ -42,7 +44,7 @@ Para quem está começando, o maior desafio não é decorar comandos do Django, 
 3. **Segurança Defensiva (Honeypot):** para proteger o formulário de contato sem usar CAPTCHAs chatos, criamos uma "armadilha invisível". É um campo oculto que humanos não veem, mas robôs preenchem automaticamente. Se o campo for preenchido, o sistema identifica o bot e descarta o envio silenciosamente.
 4. **Controle de Fluxo (Rate Limiting):** para evitar ataques de spam (milhares de e-mails por segundo), implementamos uma trava no cache. O sistema monitora o IP do usuário e, após um envio com sucesso, bloqueia novas tentativas por 10 minutos, protegendo a integridade do seu servidor de e-mail.
 5. **Sanitização de Conteúdo:** nunca confiamos no que o usuário digita. Utilizamos a biblioteca `bleach` para "limpar" as mensagens recebidas, garantindo que qualquer tentativa de injetar scripts maliciosos (ataques XSS) seja neutralizada antes mesmo de chegar ao banco de dados.
-6. **Blindagem do Navegador (CSP):** configuramos o *Content Security Policy*. Isso é como um segurança na porta do site que diz ao navegador: "só aceite estilos e scripts que venham deste próprio servidor". Isso impede que invasores injetem códigos externos no seu front-end.
+6. **Blindagem do Navegador (CSP):** configuramos o *Content Security Policy*. Isso é como um segurança na porta do site que diz ao navegador: "só execute scripts que venham deste próprio servidor". Isso impede que invasores injetem códigos externos no seu front-end.
 7. **Dinamismo das Habilidades:** o sistema permite total controle sobre a exibição da barra de progresso das habilidades. Através do Painel Administrativo, você define o percentual (0 a 100) de habilidade em cada tecnologia. Caso não queira exibir a barra de progresso, basta desmarcar a opção `Exibir barras de progresso` no seu Perfil do Painel Administrativo (*Admin*) e clicar em salvar.
 8. **Slugs nas Categorias:** cada `CategoriaProjeto` tem um *Slug* único (ex.: `web`, `api`), um identificador curto e legível. O filtro da seção de projetos usa esse valor para mostrar e esconder os cards sem recarregar a página.
 9. **Ambiente de Produção Real:** o projeto não roda apenas no seu computador. Ele foi estruturado com variáveis de ambiente (`.env`) e configurações específicas para servidores (como o `WhiteNoise` para arquivos estáticos), garantindo que o deploy em plataformas como o **PythonAnywhere** seja suave e seguro.
@@ -61,6 +63,7 @@ Para garantir a melhor experiência de aprendizado, o projeto utiliza as seguint
 | **uv** | Gerenciador de dependências e ambientes virtuais (substitui `pip`), com lockfile reprodutível. |
 | **bleach** | Limpa o HTML das mensagens recebidas, neutralizando tentativas de injeção de scripts (XSS). |
 | **django-csp** | Aplica a Content Security Policy, que diz ao navegador de onde scripts e estilos podem vir. |
+| **Pillow** | Biblioteca de imagens que converte as fotos enviadas pelo Admin para WebP, mais leve para carregar. |
 | **WhiteNoise** | Serve os arquivos estáticos em produção sem precisar de Nginx ou CDN. |
 | **Vanilla JS** | JavaScript puro (ES6+) para interações leves, sem a carga de frameworks pesados. |
 | **HTML5/CSS3** | Estrutura semântica e estilização moderna baseada em Flexbox e Grid. |
@@ -79,6 +82,13 @@ As ferramentas de qualidade (Ruff, Black, Mypy e Pytest) estão em [Qualidade e 
     cd django-fullstack-portfolio
     ```
 2.  **Configure as variáveis de ambiente:** copie o arquivo `.env.example` para `.env` e insira suas chaves (`SECRET_KEY`, `EMAIL_USER`, etc.).
+    ```bash
+    # Linux e macOS
+    cp .env.example .env
+
+    # Windows (PowerShell)
+    Copy-Item .env.example .env
+    ```
 3.  **Instale as dependências:**
     ```bash
     uv sync
@@ -106,13 +116,20 @@ As ferramentas de qualidade (Ruff, Black, Mypy e Pytest) estão em [Qualidade e 
 O projeto roda uma suíte de testes automatizados (`pytest`) e um portão de qualidade antes de qualquer commit:
 
 ```bash
-uv run ruff check .                   # lint + ordem de imports
-uv run black --check .                # formatação
-uv run mypy app_portfolio portfolio   # checagem de tipos
-uv run pytest --cov=app_portfolio     # testes + cobertura
+# Lint e ordem dos imports
+uv run ruff check .
+
+# Confira a formatação, sem reescrever arquivos
+uv run black --check .
+
+# Checagem de tipos
+uv run mypy app_portfolio portfolio
+
+# Testes
+uv run pytest
 ```
 
-O mesmo portão roda automaticamente em CI (`.github/workflows/ci.yml`) a cada push e a cada PR, junto com uma checagem de segurança (`pip-audit` + `manage.py check --deploy`). O `pip-audit` roda também toda segunda-feira (`.github/workflows/pip-audit.yml`), e o Lighthouse CI (`.github/workflows/lighthouse.yml`) audita a Home em mobile e desktop. Para o mapa de cada tecnologia da stack (o que é, por que foi escolhida, o que estudar), veja [docs/stack.md](docs/stack.md). Para as especificações de cada funcionalidade, veja [specs/](specs/). Para o detalhamento exaustivo de arquitetura e convenções, veja [CLAUDE.md](CLAUDE.md).
+O mesmo portão roda automaticamente em CI (`.github/workflows/ci.yml`) a cada push e a cada PR, junto com uma checagem de segurança (`pip-audit` + `manage.py check --deploy`). O `pip-audit` roda também toda segunda-feira (`.github/workflows/pip-audit.yml`), o CodeQL (`.github/workflows/codeql.yml`) analisa o código em busca de falhas de segurança e o Lighthouse CI (`.github/workflows/lighthouse.yml`) audita a Home em mobile e desktop. Para ver a cobertura dos testes, rode `uv run pytest --cov=app_portfolio --cov-report=term-missing`. Para o mapa de cada tecnologia da stack (o que é, por que foi escolhida, o que estudar), veja [docs/stack.md](docs/stack.md). Para as especificações de cada funcionalidade, veja [specs/](specs/). Para o detalhamento exaustivo de arquitetura e convenções, veja [CLAUDE.md](CLAUDE.md).
 
 ---
 
@@ -126,8 +143,8 @@ Para exercitar o que você aprendeu e dominar o Django, tente implementar estas 
    - **O Aprendizado:** fortalece o domínio de **manipulação de DOM com Vanilla JS** e o uso de variáveis CSS (*Design Tokens*).
 3. **✉️ Notificações Push ou Telegram:** altere a função de contato para que, além de enviar um e-mail, ela envie uma notificação para um bot do Telegram ou uma mensagem no Discord sempre que alguém preencher o formulário.
    - **O Aprendizado:** você aprenderá a integrar o Django com **APIs externas** utilizando a biblioteca `requests`.
-4. **📂 Filtros Dinâmicos de Projetos:** implemente um sistema de busca na seção de projetos que filtre os resultados sem recarregar a página (usando AJAX).
-   - **O Aprendizado:** domínio de **Querysets** complexos e comunicação assíncrona entre o front-end e o back-end.
+4. **📂 Busca de Projetos no Servidor:** o filtro por categoria da seção de projetos roda só no navegador. Crie uma caixa de busca por texto que consulte o servidor (usando AJAX) e devolva só os projetos que combinam com o título, a descrição ou a tecnologia.
+   - **O Aprendizado:** domínio de **Querysets** complexos (`Q`, `icontains`) e comunicação assíncrona entre o front-end e o back-end.
 
 ---
 
