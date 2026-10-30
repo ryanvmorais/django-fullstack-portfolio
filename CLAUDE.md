@@ -121,7 +121,7 @@ uv.lock                # Lock único gerado por `uv lock` — todo o grafo pinad
 .env.example           # Template documentado de variáveis de ambiente (commitado no repo)
 django_cache/          # Cache em arquivo do rate limit (gitignored)
 media/                 # Uploads do Admin (gitignored)
-assets/                # Capa dos READMEs (portfolio-django-home-desktop.png)
+assets/                # Capa dos READMEs (portfolio-django-home-desktop.png) e imagem de social preview (1280×640; o envio é manual, em Settings)
 README.en.md           # README em inglês (repo público é bilíngue): mesmas seções do README.md, na mesma ordem
 CONTRIBUTING.md        # Guia de contribuição
 LICENSE                # MIT
