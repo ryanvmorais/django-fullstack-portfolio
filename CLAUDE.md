@@ -98,6 +98,7 @@ app_portfolio/        # A única aplicação
   tests.py             # Suíte de testes (pytest): modelos, view e segurança do contato, ver "Qualidade" abaixo
   test_interface.py    # Testes das correções da auditoria de interface (spec 004): HTML, view, páginas de erro, CSS e JS lidos como texto
   test_semear_dados_demo.py # Testes do comando de demonstração e do Lighthouse CI
+  test_readme_en.py    # Compara o README.en.md com o README.md (títulos, tabela, selos, blocos, links)
   management/commands/semear_dados_demo.py # Dados fictícios (Lighthouse CI e dev)
   migrations/
 templates/            # Templates HTML na raiz do projeto (não dentro de app_portfolio)
@@ -120,7 +121,8 @@ uv.lock                # Lock único gerado por `uv lock` — todo o grafo pinad
 .env.example           # Template documentado de variáveis de ambiente (commitado no repo)
 django_cache/          # Cache em arquivo do rate limit (gitignored)
 media/                 # Uploads do Admin (gitignored)
-assets/                # Banner do README
+assets/                # Capa dos READMEs (portfolio-django-home-desktop.png)
+README.en.md           # README em inglês (repo público é bilíngue): mesmas seções do README.md, na mesma ordem
 CONTRIBUTING.md        # Guia de contribuição
 LICENSE                # MIT
 .github/                # Serviços do GitHub (commitado)
@@ -136,7 +138,7 @@ specs/                  # Especificações (spec-driven development); ver specs/
   NNN-feature/            # requirements.md + design.md + tasks.md por feature
 docs/
   stack.md                # Mapa de cada tecnologia da stack: o que faz, por que foi escolhida, o que estudar
-  referencia/             # Detalhes que não cabem aqui (quarentena do uv, cache, regras de interface)
+  referencia/             # Detalhes que não cabem aqui (quarentena do uv, cache, CI, regras de interface)
 ```
 
 ### Modelos (em `models.py`)
@@ -300,31 +302,22 @@ uv run mypy app_portfolio portfolio        # 3. checa tipos (NÃO altera, só re
 uv run pytest                              # 4. roda os testes
 ```
 
-Os testes ficam em dois arquivos ao lado do código, não numa pasta `tests/` — uma
+Os testes ficam em arquivos ao lado do código, não numa pasta `tests/` — uma
 única view e um punhado de models não justificam a divisão por módulo (diferente
-do `site-ryan-morais`): `tests.py` (modelos, view e segurança do contato) e
+do `site-ryan-morais`): `tests.py` (modelos, view e segurança do contato),
 `test_interface.py` (as correções da spec 004, um grupo por requisito; lê o CSS e
-o JavaScript como texto, com fixtures de isolamento próprias e um override no mypy).
+o JavaScript como texto, com fixtures de isolamento próprias e um override no mypy),
+`test_semear_dados_demo.py` e `test_readme_en.py`.
 
-**CI no GitHub Actions** (`.github/workflows/ci.yml`): roda em todo push na
-`main` e em todo `pull_request`, com dois jobs independentes: **`qualidade`**
-(`ruff check` → `black --check` → `mypy app_portfolio portfolio` → `pytest`)
-e **`seguranca`** (`pip-audit` + `manage.py check --deploy`, `DEBUG=False`).
-O CodeQL (code scanning, grátis em repo público) roda no workflow próprio
-`codeql.yml`, em PR, na `main` e uma vez por semana; não é check obrigatório. O
-Dependabot (`.github/dependabot.yml`, `uv` + `github-actions`)
-cobre a varredura contínua de dependências.
+> ⚠️ **Não regredir (README bilíngue):** `README.md` (português) e `README.en.md`
+> mudam no mesmo PR, com as mesmas seções na mesma ordem; o `test_readme_en.py`
+> quebra se os títulos, a tabela de tecnologias, os selos, os blocos de código ou
+> os links de troca divergirem. O que o produto mostra (o site é em português) não
+> se traduz.
 
-**pip-audit semanal** (`.github/workflows/pip-audit.yml`): toda segunda, 09:00 de
-São Paulo (e à mão), roda o `pip-audit` sobre o `uv.lock`, porque o CI só roda em
-push/PR e o Dependabot nem sempre abre PR. Run vermelho = CVE no lock; a resposta
-é a `/atualizar-dependencias`.
-
-**Lighthouse CI** (`.github/workflows/lighthouse.yml`): audita a Home em mobile e
-desktop, em PR que mude a página, no push da `main` e à mão; **não é check
-obrigatório**. Sobe com `manage.py semear_dados_demo` (só `DEBUG=True`). Limites
-em `.github/lighthouse/*.json`; `@lhci/cli` fixado em `LHCI_VERSION`. Detalhes em
-`docs/stack.md`; teste em `app_portfolio/test_semear_dados_demo.py`.
+**CI e automação:** o `ci.yml` (jobs `qualidade` e `seguranca`) roda em todo push na `main` e em
+todo PR; pip-audit semanal, CodeQL, Lighthouse CI e Dependabot completam. Gatilhos e detalhes em
+`docs/referencia/ci-e-automacao.md`: **leia antes de mexer em `.github/`**.
 
 ## Spec-Driven Development (em `specs/`)
 
