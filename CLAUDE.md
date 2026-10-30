@@ -120,7 +120,7 @@ uv.lock                # Lock único gerado por `uv lock` — todo o grafo pinad
 .env.example           # Template documentado de variáveis de ambiente (commitado no repo)
 django_cache/          # Cache em arquivo do rate limit (gitignored)
 media/                 # Uploads do Admin (gitignored)
-assets/                # Banner do README
+assets/                # Banner do README e imagem de social preview (1280×640; o envio é manual, em Settings)
 CONTRIBUTING.md        # Guia de contribuição
 LICENSE                # MIT
 .github/                # Serviços do GitHub (commitado)
