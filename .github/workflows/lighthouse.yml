@@ -5,7 +5,7 @@
 # Por que um workflow separado do ci.yml: o Lighthouse leva alguns minutos e tem
 # variancia em runner compartilhado; o ci.yml (qualidade) precisa continuar rapido.
 # Ele NAO e um check obrigatorio da main de proposito: um check instavel que bloqueia
-# merge ensina a ignora-lo. Vira obrigatorio depois de algumas semanas estavel.
+# merge ensina a ignora-lo.
 #
 # Gatilhos: o repositorio e publico, entao os minutos de Actions e o armazenamento dos
 # artefatos nao tem teto, e o workflow roda em PR (so quando algo que muda a pagina

@@ -86,9 +86,8 @@ Contexto da `home`:
   em um signal `pre_save` separado do model.
 - **Porquê:** manter a lógica de imagem perto do model que a usa é mais direto
   neste projeto de apenas dois models com `ImageField`; um signal
-  desacoplado ganharia sentido se o número de models crescesse (ver o mesmo
-  padrão em escala maior no `site-ryan-morais`, que usa signal reusável entre
-  6 models).
+  desacoplado ganharia sentido se o número de models crescesse (em projetos
+  maiores, um signal reusável atende vários models).
 - **Trade-off:** duplicação do bloco `if novo_conteudo and novo_nome:` entre
   os dois `save()` — aceitável no tamanho atual do projeto.
 

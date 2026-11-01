@@ -9,7 +9,7 @@ origem: engenharia reversa do código existente (portfolio/settings.py)
 
 # Tasks — Configuração e Segurança
 
-## Etapa 0 — Estado original (antes desta sessão de modernização)
+## Etapa 0 — Estado original (antes da modernização de 2026-09-11)
 
 - [x] Validação de `SECRET_KEY` obrigatória (`ValueError` no import). — RF-01
 - [x] `DEBUG` seguro por padrão (`False` se ausente). — RF-02
@@ -43,10 +43,8 @@ origem: engenharia reversa do código existente (portfolio/settings.py)
       `weekly`/`monday`, `open-pull-requests-limit: 5`) — cobre a varredura
       contínua de dependências que o `pip-audit` manual não substitui.
 - [x] `.github/workflows/ci.yml` criado com job `seguranca`
-      (`pip-audit` + `manage.py check --deploy`), espelhando o padrão do
-      `site-ryan-morais` — fecha a lacuna registrada como "pergunta em aberto"
-      na versão inicial desta spec (CI não automatizava a checagem de
-      deploy).
+      (`pip-audit` + `manage.py check --deploy`), fecha a lacuna da versão
+      inicial desta spec (o CI não automatizava a checagem de deploy).
 - [x] Portão de qualidade completo. — `uv run ruff check .`,
       `uv run black --check .`, `uv run mypy app_portfolio portfolio`,
       `uv run pytest` verdes.

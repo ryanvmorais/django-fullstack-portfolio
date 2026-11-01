@@ -23,7 +23,3 @@ Este repositório não é apenas um site pessoal, mas um laboratório de boas pr
 - **Segurança:** Nunca envie código que exponha credenciais ou desative proteções de `SSL/CSP` sem justificativa técnica.
 - **Nomenclatura:** Mantenha a coerência semântica já estabelecida no projeto.
 - **Testes:** toda mudança de comportamento (nova regra, correção de bug) vem acompanhada de um teste que a cubra — sem isso, o PR não é aceito.
-
----
-Atenciosamente,  
-**Ryan Morais**

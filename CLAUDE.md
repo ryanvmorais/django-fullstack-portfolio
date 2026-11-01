@@ -4,7 +4,7 @@ Este arquivo fornece orientações ao Claude Code (claude.ai/code) ao trabalhar 
 
 ## Visão Geral do Projeto
 
-Portfólio profissional pessoal de Ryan Morais, construído com Django 6.1.
+Portfólio profissional pessoal do mantenedor do repositório, construído com Django 6.1.
 Projeto educacional de app único (`app_portfolio`) que serve uma página única
 (a home): perfil do desenvolvedor, projetos, habilidades técnicas,
 estatísticas de destaque e um formulário de contato com camadas anti-spam.
@@ -280,10 +280,18 @@ não a senha normal da conta.
 
 ## Convenções
 
-- **Idioma do código**: português — projeto pessoal/educacional (ver
-  `/idioma` nas instruções globais).
-- **Estilo de construção de arquivos** (docstrings, type hints, comentários,
-  réguas de seção): ver a skill `/estilo-arquivos` — não repetido aqui.
+- **Idioma do código**: português — projeto pessoal/educacional. Vale para nomes
+  de classes, funções, variáveis, commits, branches, docstrings e comentários
+  técnicos. Ficam como estão: keywords da linguagem, nomes impostos pelo Django
+  (`save`, `clean`, `get_queryset`…) e pelo pytest (`test_`), termos técnicos
+  universais (API, HTTP, URL, JSON, HTML, CSS…) e as seções PEP 257 das
+  docstrings (`Args:`, `Returns:`, `Raises:`). Texto que o visitante vê segue o
+  idioma do site (português).
+- **Estilo dos arquivos Python**: docstring de módulo, de classe e de função
+  pública (seções `Args:`, `Returns:`, `Raises:` com o tipo repetido em cada
+  entrada), assinaturas totalmente anotadas (`X | None`, `-> None` explícito) e
+  comentários que explicam o *porquê*, não o *o quê*. Os commits seguem
+  Conventional Commits.
 
 ## Qualidade e Automação (`pyproject.toml`)
 
@@ -303,11 +311,12 @@ uv run pytest                              # 4. roda os testes
 ```
 
 Os testes ficam em arquivos ao lado do código, não numa pasta `tests/` — uma
-única view e um punhado de models não justificam a divisão por módulo (diferente
-do `site-ryan-morais`): `tests.py` (modelos, view e segurança do contato),
+única view e um punhado de models não justificam a divisão por módulo:
+`tests.py` (modelos, view e segurança do contato),
 `test_interface.py` (as correções da spec 004, um grupo por requisito; lê o CSS e
 o JavaScript como texto, com fixtures de isolamento próprias e um override no mypy),
-`test_semear_dados_demo.py` e `test_readme_en.py`.
+`test_semear_dados_demo.py`, `test_readme_en.py` e `test_impessoalidade.py` (falha se o
+nome do mantenedor aparecer em arquivo versionado ou se este arquivo citar skill pessoal).
 
 > ⚠️ **Não regredir (README bilíngue):** `README.md` (português) e `README.en.md`
 > mudam no mesmo PR, com as mesmas seções na mesma ordem; o `test_readme_en.py`

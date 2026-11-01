@@ -6,7 +6,7 @@ relacionado:
   - 001-vitrine-portfolio
   - 002-formulario-contato
   - 003-configuracao-seguranca
-origem: nova feature (auditoria de interface com a skill /auditoria-interface)
+origem: nova feature (auditoria de interface em navegador real)
 ---
 
 # Design — Correções da auditoria de interface
@@ -17,7 +17,7 @@ Quase tudo é CSS, marcação e JavaScript puro, no estilo que o projeto já tem
 (tokens no `:root`, BEM, uma folha `styles.css`). Duas folhas e um punhado de
 templates nascem: `fontes.css` (as fontes hospedadas) e as páginas de erro. O
 `main.js` foi reescrito por funções com nome em português e um ponto de entrada
-único (a skill `/estilo-arquivos`); o comportamento antigo (rolagem, filtros,
+único; o comportamento antigo (rolagem, filtros,
 revelação ao rolar, envio por `fetch`) foi mantido, e o que mudou é o menu, os
 avisos e o tratamento da resposta do servidor.
 
@@ -113,7 +113,7 @@ O `main.js` mostra `message` de toda resposta que não seja `ok` com
   as redes que o perfil não tem.
 - **Porquê:** o projeto é educativo e o rodapé é um exemplo de layout: quem usa o
   template troca os endereços no HTML. Quatro campos e uma migração por causa de
-  links de exemplo pesam mais que o ganho. Foi decisão do Ryan, depois de ver a
+  links de exemplo pesam mais que o ganho. Decisão do mantenedor (2026-10), depois de ver a
   alternativa (a) pronta.
 - **Trade-off:** os links levam à página inicial de cada rede, não a um perfil
   real. O `base.html` avisa isso num comentário.

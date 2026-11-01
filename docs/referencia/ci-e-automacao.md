@@ -16,7 +16,7 @@ O CodeQL (code scanning, grátis em repo público) roda no workflow próprio `co
 
 O `pip-audit` roda toda segunda, às 09:00 de São Paulo (e à mão), sobre o `uv.lock`
 (`.github/workflows/pip-audit.yml`), porque o CI só roda em push/PR e o Dependabot nem sempre abre PR. Run vermelho =
-CVE no lock; a resposta é a `/atualizar-dependencias`.
+CVE no lock; a resposta é subir o pacote afetado (`uv lock --upgrade-package <pacote>`).
 
 ## Lighthouse CI
 

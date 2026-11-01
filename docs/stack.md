@@ -290,7 +290,7 @@ o IPython se disponível).
 | `asgiref`, `sqlparse`, `tzdata` | Dependências transitivas do próprio Django, não importadas diretamente |
 | `webencodings` | Dependência transitiva do `bleach` |
 | Inter e JetBrains Mono (`static/fonts/`) | Fontes do texto e do código, hospedadas no projeto em arquivo variável (latin, `font-display: swap`) em vez do Google Fonts: sem requisição de terceiros (LGPD) e sem CSS externo bloqueando a primeira pintura (spec 004, ADR-05). Licença OFL ao lado dos arquivos |
-| axe-core (só nas auditorias) | Verificador de acessibilidade rodado em navegador real pela skill `/auditoria-interface`; não é dependência do projeto, e as regras que ele achou viraram testes em `app_portfolio/test_interface.py` |
+| axe-core (só nas auditorias) | Verificador de acessibilidade rodado em navegador real numa auditoria de interface; não é dependência do projeto, e as regras que ele achou viraram testes em `app_portfolio/test_interface.py` |
 
 ---
 
@@ -302,8 +302,7 @@ o IPython se disponível).
 - **Redis / cache distribuído** — o rate limit usa `FileBasedCache`, compartilhado entre
   workers sem infraestrutura extra; o `LocMemCache` foi descartado por ser por processo.
 - **django-two-factor-auth / django-axes (2FA e brute-force no Admin)** —
-  usados no `site-ryan-morais` (projeto irmão, maior), mas decisão explícita
-  de escala não trazer aqui: um único administrador, risco aceito (ver
+  decisão explícita de escala não trazer aqui: um único administrador, risco aceito (ver
   `specs/003-configuracao-seguranca/design.md`, ADR-04).
 - **DRF (Django REST Framework) ou qualquer API** — o projeto não expõe
   endpoints JSON além das respostas AJAX do próprio formulário de contato
