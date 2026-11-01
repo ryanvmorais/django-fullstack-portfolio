@@ -341,27 +341,13 @@ de interface de 2026-10-18. A metodologia e o índice completo estão em
 
 ## Gestão de Dependências (uv)
 
-O projeto é gerenciado pelo **uv** (substitui o antigo `pip` +
-`requirements/*.txt`). A "parte humana" fica num só lugar — o
-`pyproject.toml`:
+O projeto é gerenciado pelo **uv**; a "parte humana" fica no `pyproject.toml` (diretas de
+runtime, grupo `dev`, extra `prod`, `package = false`) e o `uv.lock` trava o grafo completo.
+Comandos em "Comandos Comuns". Como os dois se dividem, o que é direto e o que é transitivo:
+`docs/referencia/dependencias-e-cache.md`.
 
-- **`[project] dependencies`** — dependências **diretas** de runtime
-  (Django, Pillow, whitenoise, bleach, django-csp, python-dotenv, certifi).
-- **`[dependency-groups] dev`** — ferramentas de desenvolvimento (ruff,
-  black, mypy, django-stubs, pytest, pip-audit…). `uv sync` instala por
-  padrão; `uv sync --no-dev` exclui.
-- **`[project.optional-dependencies] prod`** — extras de produção
-  (`gunicorn`, `psycopg2-binary`). Instale com `uv sync --extra prod`.
-- **`[tool.uv] package = false`** — é uma aplicação Django, não uma lib a ser
-  empacotada.
-
-Liste apenas **diretas** no `pyproject.toml`; as transitivas (`asgiref`,
-`sqlparse`, `tzdata`, `webencodings`) são resolvidas automaticamente e não
-aparecem lá.
-
-**`uv.lock`** trava o grafo **completo** em versões exatas. Gerado/atualizado
-por `uv lock` (ou automaticamente por `uv add`/`uv remove`) e **nunca editado
-à mão**. Commite sempre o `pyproject.toml` **e** o `uv.lock`.
+> ⚠️ **Não regredir:** o `uv.lock` nunca é editado à mão, e o `pyproject.toml` e o `uv.lock`
+> vão sempre no mesmo commit.
 
 **Quarentena de 7 dias:** `[tool.uv] exclude-newer = "7 days"` (lock só com versões de 7+ dias).
 Exceções e prazos: `docs/referencia/dependencias-e-cache.md`.
