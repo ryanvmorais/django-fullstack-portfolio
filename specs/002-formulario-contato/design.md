@@ -37,7 +37,7 @@ de persistir: honeypot → rate limit → validação de formulário → sanitiz
 `data_envio` (`auto_now_add`), `lida` (bool, default `False`, não usada por
 nenhuma view pública — só consulta manual no Admin).
 
-Migração `0022_alter_mensagemcontato_mensagem` (desta sessão) adiciona o
+Migração `0022_alter_mensagemcontato_mensagem` (modernização de 2026-09-11) adiciona o
 validador de tamanho sem alterar o tipo de coluna (TextField no SQLite não tem
 limite nativo; o validador é aplicado em nível de Django, via `full_clean()`
 do `ModelForm`).
@@ -53,7 +53,7 @@ Sem rota própria — o formulário faz POST para a própria URL da home
 | Rate limit ativo | `messages.error` + redirect | `429` + `{"status": "error"}` |
 | Formulário inválido | Re-renderiza `home.html` com erros do form | `400` + `{"status": "error", "message": "Dados inválidos."}` |
 | Envio OK | `redirect("home")` | `200` + `{"status": "success", "message": "Mensagem enviada!"}` |
-| Falha no SMTP | Re-renderiza sem feedback específico (ver RF-05, pergunta aberta) | `500` + `{"status": "error", "message": "Erro ao enviar e-mail."}` |
+| Falha no SMTP | Aviso `MENSAGEM_FALHA_ENVIO` (RF-05, corrigido na spec 004) | `500` + `{"status": "error", "message": "Erro ao enviar e-mail."}` |
 
 ## 5. Decisões técnicas (ADRs)
 
@@ -81,9 +81,9 @@ Sem rota própria — o formulário faz POST para a própria URL da home
   **Admin** (embora o Django Admin também autoescape, a sanitização na
   gravação evita depender disso em qualquer superfície futura, ex.: uma
   API/export que reexiba `mensagem` sem escapar).
-- **Trade-off:** `bleach` é uma dependência a mais; `nh3` (usado no
-  `site-ryan-morais`) seria uma alternativa mais moderna/rápida (Rust), mas
-  trocar bibliotecas está fora do escopo desta sessão de modernização.
+- **Trade-off:** `bleach` é uma dependência a mais; `nh3`
+  seria uma alternativa mais moderna/rápida (Rust), mas trocar bibliotecas
+  está fora do escopo da modernização de 2026-09-11.
 
 ### ADR-03 — Rate limit ativado só após o envio (não a validação)
 
@@ -101,8 +101,7 @@ Sem rota própria — o formulário faz POST para a própria URL da home
   workers/containers a sincronizar.
 - **Trade-off:** um restart do processo zera todos os rate limits ativos;
   aceitável no volume de tráfego do projeto. Se o projeto crescer para
-  múltiplos workers, precisaria migrar para Redis (mesma decisão documentada
-  no `site-ryan-morais`, spec 012, que já enfrentou esse limite).
+  múltiplos workers, precisaria migrar para Redis.
 
 ## 6. Impacto e dependências
 

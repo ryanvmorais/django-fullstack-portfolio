@@ -9,7 +9,7 @@ origem: engenharia reversa do código existente (app_portfolio)
 
 # Tasks — Vitrine do Portfólio
 
-## Etapa 0 — Estado original (antes desta sessão de modernização)
+## Etapa 0 — Estado original (antes da modernização de 2026-09-11)
 
 - [x] Models `Perfil`, `Projeto`, `Tecnologia`, `CategoriaProjeto`,
       `CategoriaHabilidade`, `Habilidade`, `Estatistica` implementados,

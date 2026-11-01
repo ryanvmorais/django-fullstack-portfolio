@@ -10,7 +10,7 @@ origem: engenharia reversa do código existente (app_portfolio)
 
 # Tasks — Formulário de Contato
 
-## Etapa 0 — Estado original (antes desta sessão de modernização)
+## Etapa 0 — Estado original (antes da modernização de 2026-09-11)
 
 - [x] `MensagemContatoForm` (ModelForm) + `MensagemContato` (model) implementados. — RF-04
 - [x] Honeypot no template (`display:none`, `tabindex="-1"`) + verificação na view. — RF-01

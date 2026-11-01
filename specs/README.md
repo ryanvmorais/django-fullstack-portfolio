@@ -2,8 +2,7 @@
 
 Esta pasta contém as **especificações** do projeto no padrão *spec-driven
 development*. Specs são Markdown puro, versionado no Git — **agnósticas de
-ferramenta**: servem para você, para o CI e para qualquer IA. A skill que as
-opera (`/spec`) vive em `~/.claude/skills/`, mas as specs em si independem dela.
+ferramenta**: servem para você, para o CI e para qualquer IA.
 
 ## Por que specs
 
@@ -51,22 +50,15 @@ requirements.md  ──(aprovação)──▶  design.md  ──(aprovação)─
 
 Não se avança de fase sem o "ok" humano — esse é o fluxo para **features
 novas**. As specs 001 a 003 foram reconstruídas por **engenharia reversa** de
-um projeto já funcionando (exceção documentada na skill `/spec`), então já
+um projeto já funcionando (exceção ao fluxo normal), então já
 nascem com `status: concluído` e `tasks.md` inteiramente `[x]`. A 004 nasceu de
-uma auditoria de interface e foi escrita junto da correção, a pedido do Ryan
+uma auditoria de interface e foi escrita junto da correção, a pedido do mantenedor
 ("aplique tudo conforme recomendado"), sem as pausas de aprovação entre as fases.
 
-## Como usar (com Claude Code)
+## Como usar
 
-| Comando | Ação |
-|---|---|
-| `/spec nova <nome>` | Cria `specs/NNN-<nome>/` e escreve `requirements.md`; para para aprovação |
-| `/spec design` | Após requisitos aprovados, escreve `design.md`; para para aprovação |
-| `/spec tasks` | Após design aprovado, escreve `tasks.md`; para para aprovação |
-| `/spec implementar` | Executa as tarefas em ordem, marcando `[x]` e rodando os portões de qualidade |
-| `/spec status` | Resume o estado de todas as specs (lê o frontmatter) |
-
-Sem o Claude Code, os mesmos documentos guiam qualquer dev ou IA — são só Markdown.
+Os documentos são só Markdown: guiam qualquer dev ou IA, com ou sem ferramenta.
+Cada fase termina num portão de aprovação antes de a próxima começar.
 
 ## Índice de specs
 
@@ -78,7 +70,7 @@ Sem o Claude Code, os mesmos documentos guiam qualquer dev ou IA — são só Ma
 | 004 | [correcoes-de-interface](004-correcoes-de-interface/) | concluído | Correções da auditoria de interface: hero no celular, formulário com retorno, menu, contraste, avisos, fontes locais, páginas de erro e imagens novas |
 
 > As specs 001 a 003 foram reconstruídas por **engenharia reversa** do código
-> existente, nesta sessão de modernização (2026-09-11), que também incluiu uma
+> existente, na modernização de 2026-09-11, que também incluiu uma
 > auditoria de segurança completa e a migração de `pip` para `uv`.
 
 ## Notas de manutenção (gotchas)

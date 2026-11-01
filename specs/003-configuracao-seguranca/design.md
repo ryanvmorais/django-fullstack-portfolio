@@ -53,8 +53,8 @@ Variáveis de ambiente consumidas por `settings.py` (documentadas em
 - **Decisão:** sem `settings/base.py` + `settings/dev.py` + `settings/prod.py`
   (padrão comum em projetos maiores); tudo em um arquivo, ramificado por
   `if not DEBUG:`.
-- **Alternativas:** múltiplos módulos de settings (usado no `site-ryan-morais`
-  via `settings_test.py` para os testes).
+- **Alternativas:** múltiplos módulos de settings (por exemplo, um
+  `settings_test.py` para os testes).
 - **Porquê:** projeto de escala pequena, um único app — a divisão em módulos
   adicionaria indireção sem benefício proporcional.
 - **Trade-off:** os testes rodam contra o mesmo `settings.py` de produção,
@@ -64,17 +64,16 @@ Variáveis de ambiente consumidas por `settings.py` (documentadas em
 
 ### ADR-02 — CSP com `'unsafe-inline'` em `style-src`, mas não em `script-src`
 
-- **Decisão (corrigida nesta sessão):** `CSP_SCRIPT_SRC = ("'self'",)` — sem
+- **Decisão (corrigida em 2026-09-11):** `CSP_SCRIPT_SRC = ("'self'",)` — sem
   `'unsafe-inline'`. `CSP_STYLE_SRC` mantém `'unsafe-inline'` porque
   `home.html` usa 2 atributos `style=""` inline (barra de progresso de
   habilidades, com largura dinâmica vinda do banco).
 - **Porquê:** antes da correção, `script-src` também tinha `'unsafe-inline'`
   sem necessidade real (nenhum `<script>` inline em nenhum template) — isso
   anulava boa parte do valor do CSP como defesa contra XSS.
-- **Alternativas futuras:** nonce por request (como o `site-ryan-morais`, spec
-  010) resolveria também o `style-src`, mas exigiria mover a largura da barra
-  de progresso para uma custom property CSS lida via `data-*` — fora do
-  escopo desta sessão.
+- **Alternativa não adotada:** nonce por request resolveria também o `style-src`, mas
+  exigiria mover a largura da barra de progresso para uma custom property CSS
+  lida via `data-*` — fora do escopo da modernização de 2026-09-11.
 
 ### ADR-03 — Ofuscação da URL do Admin como defesa em profundidade
 
@@ -86,13 +85,12 @@ Variáveis de ambiente consumidas por `settings.py` (documentadas em
   direcionado que descubra a URL por outro meio (linkado, vazado em log,
   etc.). Complementar, não substituto, de uma senha forte.
 
-### ADR-04 — Sem 2FA no Admin (diferente do `site-ryan-morais`)
+### ADR-04 — Sem 2FA no Admin
 
 - **Decisão:** autenticação do Admin é usuário/senha padrão do Django.
 - **Porquê:** escopo e público do projeto (portfólio pessoal, um único
   administrador) não justificam a complexidade de `django-two-factor-auth` +
-  `django-axes` que o Hub aplica (spec 012) — decisão explícita de escala, não
-  descuido.
+  `django-axes` — decisão explícita de escala, não descuido.
 
 ## 6. Impacto e dependências
 
@@ -106,7 +104,7 @@ Variáveis de ambiente consumidas por `settings.py` (documentadas em
 ## 7. Estratégia de testes
 
 Não há teste automatizado desta spec na suíte `pytest` — a verificação é
-manual (`manage.py check --deploy` + auditoria de segurança desta sessão:
+manual (`manage.py check --deploy` + auditoria de segurança de 2026-09-11:
 `pip-audit`, `semgrep`, `detect-secrets`, revisão OWASP). `disable_ssl_redirect`
 (spec 002) existe justamente porque os testes de view rodam contra este
 `settings.py` sem um settings de teste dedicado.

@@ -11,7 +11,7 @@ origem: engenharia reversa do código existente (portfolio/settings.py)
 
 > Reconstruído por engenharia reversa a partir de uma auditoria de segurança
 > completa (5 camadas: dependências, SAST, segredos, configuração e revisão
-> OWASP) conduzida nesta sessão. Cobertura: `manage.py check --deploy`
+> OWASP) conduzida em 2026-09-11. Cobertura: `manage.py check --deploy`
 > (manual, não automatizado em teste) e verificação manual de cada
 > configuração abaixo.
 
@@ -33,8 +33,7 @@ alguém esquecer de configurar algo em produção.
 
 ## 3. Não-objetivos
 
-- 2FA no Admin (existe no `site-ryan-morais`, spec 012; não implementado aqui —
-  ver "Perguntas em aberto").
+- 2FA no Admin (não implementado — ver "Limites conhecidos").
 - Rate limit distribuído (Redis) — `LocMemCache` é suficiente no deploy atual
   (ver spec 002, ADR-04).
 - WAF/proteção de borda — fora do controle da aplicação Django.
@@ -78,7 +77,7 @@ alguém esquecer de configurar algo em produção.
 
 - **Given** qualquer resposta HTTP
   **Then** o header CSP é definido via `django-csp`: `default-src 'self'`,
-  `script-src 'self'` (sem `'unsafe-inline'` — corrigido nesta sessão),
+  `script-src 'self'` (sem `'unsafe-inline'` — corrigido em 2026-09-11),
   `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
   `img-src 'self' data: https:`, `font-src 'self' https://fonts.gstatic.com`.
 
@@ -109,13 +108,11 @@ alguém esquecer de configurar algo em produção.
 
 - **RNF-01 (Segredos):** `.env`, `db.sqlite3` e `venv`/`.venv` nunca são
   versionados (`.gitignore`); confirmado sem achados em `detect-secrets` +
-  `git ls-files` na auditoria desta sessão.
+  `git ls-files` na auditoria de 2026-09-11.
 - **RNF-02 (SAST):** `semgrep scan --config auto` (459 regras, multi-linguagem)
   não encontrou padrão inseguro em `app_portfolio/` nem `portfolio/`.
 
-## 6. Perguntas em aberto / decisões conhecidas
+## 6. Limites conhecidos
 
 - Sem 2FA no Admin — risco aceito dado que é um projeto pessoal de baixo
-  valor de alvo; reavaliar se o volume de acesso/edição crescer.
-- Falha de envio de e-mail no fluxo HTML não é reportada ao usuário (ver spec
-  002, RF-05) — não é uma falha de configuração, mas um gap de UX adjacente.
+  valor de alvo.

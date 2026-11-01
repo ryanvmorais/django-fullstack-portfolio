@@ -41,7 +41,7 @@ de destaque, todos editáveis via Django Admin sem precisar mexer em código.
 ## 4. Personas
 
 - **Visitante/recrutador** — navega a home para avaliar o desenvolvedor.
-- **Administrador (o próprio Ryan)** — cadastra/edita perfil, projetos,
+- **Administrador (o mantenedor)** — cadastra/edita perfil, projetos,
   habilidades e estatísticas pelo Django Admin.
 
 ## 5. Requisitos funcionais e critérios de aceite
@@ -125,10 +125,9 @@ de destaque, todos editáveis via Django Admin sem precisar mexer em código.
   tamanho de arquivo no nível da aplicação — mitigado pelo fato de o upload
   só estar disponível a usuários `is_staff` no Admin.
 
-## 7. Perguntas em aberto
+## 7. Limites conhecidos
 
 - Não há paginação para portfólios com muitos projetos; assume-se um número
   pequeno o suficiente para caber numa grade sem scroll interno.
-- `Perfil` não impõe singleton por código (diferente do Hub, spec
-  007-conteudo-institucional) — cadastrar um segundo `Perfil` no Admin faz
+- `Perfil` não impõe singleton por código — cadastrar um segundo `Perfil` no Admin faz
   `Perfil.objects.first()` retornar um registro arbitrário.

@@ -6,12 +6,12 @@ relacionado:
   - 001-vitrine-portfolio
   - 002-formulario-contato
   - 003-configuracao-seguranca
-origem: nova feature (auditoria de interface com a skill /auditoria-interface)
+origem: nova feature (auditoria de interface em navegador real)
 ---
 
 # Requisitos — Correções da auditoria de interface
 
-> Escrita depois da auditoria, a pedido do Ryan ("aplique todas as correções,
+> Escrita depois da auditoria, a pedido do mantenedor ("aplique todas as correções,
 > inclusive as sugestões, conforme recomendado"). Cada requisito nasceu de um
 > achado medido em Chrome real (10 tamanhos de celular, 768 e 1280 px, axe-core
 > 4.14.0, Tab, formulário e dados opcionais). Os números "antes" abaixo são
@@ -292,12 +292,12 @@ Os principais:
 ## 6. Perguntas em aberto / decisões resolvidas
 
 1. **Redes do rodapé (RF-14):** ficam fixas, como estavam. A primeira versão
-   desta spec as tornou campos opcionais do `Perfil` (migração `0023`); o Ryan
+   desta spec as tornou campos opcionais do `Perfil` (migração `0023`); o mantenedor
    preferiu o rodapé fixo e a migração saiu antes do merge (ver ADR-04).
 2. **Filtros e botão do GitHub em 14 px:** continuam menores que o corpo (16 px),
-   na mesma família. A `/auditoria-interface` os sinaliza como `fonte_do_corpo`;
+   na mesma família. A auditoria os sinaliza como `fonte_do_corpo`;
    foram tratados como chips e botões secundários (ver ADR-09).
-3. **Imagens:** o Ryan gerou as novas no ChatGPT a partir dos prompts da
+3. **Imagens:** as imagens novas foram geradas com IA a partir dos prompts da
    auditoria. O banco local não existia (o projeto só guarda dados no servidor);
    foi criado um `db.sqlite3` de demonstração, ignorado pelo Git, com as seis
    capas e a foto novas. Em produção, as imagens entram pelo admin.

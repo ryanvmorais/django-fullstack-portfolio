@@ -6,7 +6,7 @@ relacionado:
   - 001-vitrine-portfolio
   - 002-formulario-contato
   - 003-configuracao-seguranca
-origem: nova feature (auditoria de interface com a skill /auditoria-interface)
+origem: nova feature (auditoria de interface em navegador real)
 ---
 
 # Tasks — Correções da auditoria de interface

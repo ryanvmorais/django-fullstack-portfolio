@@ -11,7 +11,7 @@ origem: engenharia reversa do código existente (app_portfolio)
 # Requisitos — Formulário de Contato
 
 > Reconstruído por engenharia reversa. Cobertura em `app_portfolio/tests.py`
-> (`TestSegurancaContato`). A auditoria de segurança desta sessão (ver
+> (`TestSegurancaContato`). A auditoria de segurança de 2026-09-11 (ver
 > `specs/003-configuracao-seguranca/`) corrigiu duas falhas encontradas nesta
 > feature antes da documentação: chamadas SMTP reais durante os testes, e
 > ausência de limite de tamanho no campo `mensagem`.
@@ -81,7 +81,7 @@ limitado/pago em muitos provedores), e sem exigir CAPTCHA de terceiros.
   **When** o formulário é validado
   **Then** `MaxLengthValidator(5000)` no model rejeita o envio (`form.is_valid()`
   retorna `False`).
-- **Corrigido nesta sessão** (auditoria de segurança, achado BAIXA): antes,
+- **Corrigido em 2026-09-11** (auditoria de segurança, achado BAIXA): antes,
   `mensagem` era um `TextField` sem limite, permitindo payloads arbitrariamente
   grandes por envio a cada janela de rate limit.
 
@@ -96,8 +96,8 @@ limitado/pago em muitos provedores), e sem exigir CAPTCHA de terceiros.
 - **Given** falha no envio (SMTP indisponível, credenciais inválidas)
   **Then** a exceção é capturada e logada (`logger.exception`); a mensagem já
   salva no banco não é perdida; AJAX recebe HTTP 500 com JSON de erro; HTML
-  não recebe feedback de erro específico (limitação conhecida — ver
-  "Perguntas em aberto").
+  recebe o mesmo aviso (`MENSAGEM_FALHA_ENVIO`) pelas `messages`
+  (corrigido na spec 004).
 
 ### RF-06 — Respostas híbridas HTML/AJAX
 
@@ -119,7 +119,7 @@ limitado/pago em muitos provedores), e sem exigir CAPTCHA de terceiros.
 ## 6. Requisitos não-funcionais
 
 - **RNF-01 (Isolamento de testes):** a suíte nunca deve depender de rede real.
-  Corrigido nesta sessão: `disable_real_email` (fixture autouse) força
+  Corrigido em 2026-09-11: `disable_real_email` (fixture autouse) força
   `EMAIL_BACKEND` para `locmem` durante os testes — antes, `send_mail()`
   tentava conectar ao SMTP real do Gmail a cada teste que passava pelo POST
   de contato.
@@ -127,14 +127,10 @@ limitado/pago em muitos provedores), e sem exigir CAPTCHA de terceiros.
   registro da mensagem no banco (a ordem no código é: salvar primeiro, depois
   tentar enviar).
 - **RNF-03 (CSP):** o formulário não depende de `'unsafe-inline'` em
-  `script-src` — corrigido nesta sessão (ver spec 003).
+  `script-src` — corrigido em 2026-09-11 (ver spec 003).
 
-## 7. Perguntas em aberto
+## 7. Limites conhecidos
 
-- Falha de envio de e-mail no fluxo **HTML** (não-AJAX) não gera nenhum
-  feedback visível ao usuário — ele vê a página normal sem saber se o e-mail
-  foi enviado. Não corrigido nesta sessão (mudança de comportamento, não bug
-  de segurança).
 - O rate limit é por `REMOTE_ADDR` puro, sem suporte a `X-Forwarded-For` —
   correto para o modelo de deploy atual (PythonAnywhere expõe o IP real do
   visitante), mas quebraria atrás de um proxy que não repassa o IP original.
