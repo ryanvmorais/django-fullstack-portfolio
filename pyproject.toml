@@ -11,7 +11,7 @@
 # =============================================================================
 
 [project]
-name = "django-fullstack-portfolio"
+name = "portfolio-dinamico"
 version = "1.0.0"
 requires-python = ">=3.12"
 dependencies = [

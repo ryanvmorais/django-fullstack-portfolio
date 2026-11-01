@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-6.1-092E20?logo=django&logoColor=white)
 ![deps](https://img.shields.io/badge/deps-uv-DE5FE9)
-[![CI](https://github.com/ryanvmorais/django-fullstack-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/ryanvmorais/django-fullstack-portfolio/actions/workflows/ci.yml)
+[![CI](https://github.com/ryanvmorais/portfolio-dinamico/actions/workflows/ci.yml/badge.svg)](https://github.com/ryanvmorais/portfolio-dinamico/actions/workflows/ci.yml)
 ![Lint](https://img.shields.io/badge/lint-ruff-261230)
 ![Format](https://img.shields.io/badge/style-black-000000)
 ![Types](https://img.shields.io/badge/types-mypy%20strict-2A6DB2)
@@ -78,8 +78,8 @@ As ferramentas de qualidade (Ruff, Black, Mypy e Pytest) estão em [Qualidade e 
 
 1.  **Clone o repositório:**
     ```bash
-    git clone https://github.com/ryanvmorais/django-fullstack-portfolio.git
-    cd django-fullstack-portfolio
+    git clone https://github.com/ryanvmorais/portfolio-dinamico.git
+    cd portfolio-dinamico
     ```
 2.  **Configure as variáveis de ambiente:** copie o arquivo `.env.example` para `.env` e insira suas chaves (`SECRET_KEY`, `EMAIL_USER`, etc.).
     ```bash
@@ -152,7 +152,7 @@ Para exercitar o que você aprendeu e dominar o Django, tente implementar estas 
 
 Este projeto faz parte de uma trilha de estudos em Python. Depois deste, experimente:
 
-- **[Blog Culinário em Django](https://github.com/ryanvmorais/django-blog-culinario):** modelagem de domínio, autenticação, admin customizado e segurança.
+- **[Blog Culinário em Django](https://github.com/ryanvmorais/blog-culinario):** modelagem de domínio, autenticação, admin customizado e segurança.
 - **[webvigil](https://github.com/ryanvmorais/webvigil):** um scanner de vulnerabilidades web (DAST) em Python, para ver a segurança do outro lado.
 
 Veja todos os projetos e vídeos do canal em [aprenda-com-ryan-morais](https://github.com/ryanvmorais/aprenda-com-ryan-morais).
@@ -163,7 +163,7 @@ Veja todos os projetos e vídeos do canal em [aprenda-com-ryan-morais](https://g
 
 Desenvolver sistemas robustos e seguros com Django envolve muitos detalhes técnicos, mas estou aqui para ajudar! Se você encontrou algum comportamento inesperado no código, teve dificuldades com as configurações de ambiente ou pensou em uma melhoria arquitetural que tornaria este projeto ainda mais didático:
 
-- **Abra uma [Issue](https://github.com/ryanvmorais/django-fullstack-portfolio/issues):** descreva sua dúvida ou sugestão. É a melhor forma de construirmos um material de referência sólido para a comunidade e ajudarmos outros desenvolvedores que possam ter o mesmo questionamento.
+- **Abra uma [Issue](https://github.com/ryanvmorais/portfolio-dinamico/issues):** descreva sua dúvida ou sugestão. É a melhor forma de construirmos um material de referência sólido para a comunidade e ajudarmos outros desenvolvedores que possam ter o mesmo questionamento.
 - **Contribua com código:** quer propor uma melhoria? Veja o passo a passo no [CONTRIBUTING.md](CONTRIBUTING.md).
 - **Me mande um e-mail:** se preferir algo mais privado, escreva para [**contato@ryanmorais.com.br**](mailto:contato@ryanmorais.com.br).
 
