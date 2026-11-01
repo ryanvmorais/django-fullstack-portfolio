@@ -311,10 +311,12 @@ uv run pytest                              # 4. roda os testes
 ```
 
 Os testes ficam em arquivos ao lado do código, não numa pasta `tests/` — uma
-única view e um punhado de models não justificam a divisão por módulo: `tests.py` (modelos, view e segurança do contato),
+única view e um punhado de models não justificam a divisão por módulo:
+`tests.py` (modelos, view e segurança do contato),
 `test_interface.py` (as correções da spec 004, um grupo por requisito; lê o CSS e
 o JavaScript como texto, com fixtures de isolamento próprias e um override no mypy),
-`test_semear_dados_demo.py` e `test_readme_en.py`.
+`test_semear_dados_demo.py`, `test_readme_en.py` e `test_impessoalidade.py` (falha se o
+nome do mantenedor aparecer em arquivo versionado ou se este arquivo citar skill pessoal).
 
 > ⚠️ **Não regredir (README bilíngue):** `README.md` (português) e `README.en.md`
 > mudam no mesmo PR, com as mesmas seções na mesma ordem; o `test_readme_en.py`
